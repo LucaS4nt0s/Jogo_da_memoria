@@ -1,0 +1,179 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@font-face{
+    font-family: 'Star Jedi';
+    src: url('../font/StarJedi.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --preto-profundo: #000000;
+    --amarelo-vibrante: #FFE81F;
+    --dark-slate-gray: #4D5656;
+    --azul-celeste: #87CEEB;
+    --vermelho-sangue: #FF0000;
+    --cinza-metalico: #A9A9A9;
+    --branco-puro: #FFFFFF;
+    --amarelo-hover: #CCAC00;
+    --fonte-star-wars: 'Star Jedi';
+    --fonte-corpo-de-texto: 'Space Mono', monospace;
+    --fonte-secundaria: 'Oswald', sans-serif;
+}
+
+body {
+    font-family: var(--fonte-corpo-de-texto);
+    background-image: url('../img/star_wars_background.jpg');
+    opacity: 1;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: var(--black);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+
+h1{
+    font-family: 'Star Jedi', sans-serif;
+    font-size: 4rem;
+    font-weight: bold;
+    color: transparent;
+    -webkit-text-stroke-width: 1px; /* Largura do contorno (ajuste conforme necessário) */
+    -webkit-text-stroke-color: #FFE81F; /* Cor do contorno (amarelo Star Wars) */
+    text-stroke-width: 1px;
+    text-stroke-color: #FFE81F;
+    margin-bottom: 30px;
+}
+
+h2{
+    font-family: var(--fonte-star-wars);
+    color: var(--azul-eletrico);
+    font-size: 3.0em; /* Ajuste o tamanho conforme necessário */
+    color: var(--azul-celeste); /* Azul Elétrico / Cor da Força */
+    text-shadow: 0 0 5px var(--azul-celeste);
+    letter-spacing: 2px; /* Espaçamento entre letras para melhor visualização */
+}
+
+
+form {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: var(--branco-puro);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 30dvw;
+    height: 60dvh;
+}
+
+.bottom-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.Botao-Login{
+    background-color: var(--amarelo-vibrante);
+    color: var(--preto-profundo);
+    border: none;
+    padding: 10px 20px;
+    width: 90%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    font-family: var(--fonte-corpo-de-texto);
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid var(--cinza-metalico);
+    border-radius: 5px;
+    font-size: 1rem;
+    color: var(--preto-profundo);
+}
+
+input[type="text"]::placeholder {
+    color: rgba(255, 255, 255, 0.7); 
+    opacity: 1; 
+}
+
+input:focus {
+    outline: none; 
+    border-color: var(--azul-celeste); 
+    box-shadow: 0 0 10px var(--azul-celeste);
+}
+
+.form-cadastro input[type="text"]::placeholder {
+    color: rgba(255, 255, 255, 0.7); 
+    opacity: 1; 
+}
+
+.form-cadastro input:focus {
+    outline: none; 
+    border-color: var(--vermelho-sangue); 
+    box-shadow: 0 0 10px var(--vermelho-sangue);
+}
+
+.container-input{
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+}
+
+.bottom-form span {
+    color: var(--branco-puro);
+    font-size: 0.8rem;
+    margin-top: 10px;
+}
+
+.bottom-form span a {
+    color: var(--amarelo-vibrante);
+    text-decoration: none;
+}
+
+.bottom-form span a:hover {
+    color: var(--amarelo-hover);
+    text-decoration: underline;
+}
+
+.Botao-Login:hover {
+    background-color: var(--amarelo-hover);
+}
+
+.cadastro-h2{
+    color: var(--vermelho-sangue); /* Azul Elétrico / Cor da Força */
+    text-shadow: 0 0 5px var(--vermelho-sangue);
+    letter-spacing: 2px; /* Espaçamento entre letras para melhor visualização */
+}
+
+.form-cadastro{
+    height: 70dvh;
+}
+
+.error-message {
+    color: var(--vermelho-sangue);
+    font-size: 1rem;
+    margin-top: 10px;
+    text-align: center;
+}
