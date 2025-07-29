@@ -1,0 +1,102 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@font-face{
+    font-family: 'Star Jedi';
+    src: url('../font/StarJedi.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --preto-profundo: #000000;
+    --amarelo-vibrante: #ffe81f;
+    --dark-slate-gray: #4D5656;
+    --azul-celeste: rgb(135, 206, 235);
+    --vermelho-sangue: #ff0000;
+    --vermelho-hover: #ff5757;
+    --cinza-metalico: #A9A9A9;
+    --branco-puro: #FFFFFF;
+    --amarelo-hover: #CCAC00;
+    --verde-neon: #39ff14;
+    --fonte-star-wars: 'Star Jedi';
+    --fonte-corpo-de-texto: 'Space Mono', monospace;
+    --fonte-secundaria: 'Oswald', sans-serif;
+}
+
+body {
+    font-family: var(--fonte-corpo-de-texto);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../img/star_wars_background.jpg');
+    opacity: 1;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: var(--preto-profundo);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+header {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    color: var(--amarelo-vibrante);
+}
+
+.titulo-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+.titulo-header h1 {
+    font-family: var(--fonte-star-wars);
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: transparent;
+    -webkit-text-stroke-width: 1px; /* Largura do contorno (ajuste conforme necessário) */
+    -webkit-text-stroke-color: #FFE81F; /* Cor do contorno (amarelo Star Wars) */
+    text-stroke-width: 1px;
+    text-stroke-color: #FFE81F;
+    margin-bottom: 30px;
+}
+
+.botoes-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+}
+
+.botoes-header span {
+    font-family: var(--fonte-corpo-de-texto);
+    font-size: 1.3rem;
+    color: var(--amarelo-vibrante);
+}
+
+.Botao-Logout {
+    background-color: var(--vermelho-sangue);
+    color: var(--branco-puro);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: var(--fonte-corpo-de-texto);
+}
+
+.Botao-Logout:hover {
+    background-color: var(--vermelho-hover);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+}

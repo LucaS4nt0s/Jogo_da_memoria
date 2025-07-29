@@ -1,0 +1,168 @@
+main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    gap: 40px;
+}
+
+.instrucoes {
+    background-color: rgba(0, 0, 0, 0.7);
+    font-family: var(--fonte-corpo-de-texto);
+    color: var(--amarelo-vibrante);
+    border: 1px solid var(--azul-celeste);
+    border-radius: 30px;
+    box-shadow: 0 0 15px rgba(135, 206, 235, 0.5);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40%;
+    padding: 20px;
+}
+
+.instrucoes h2 {
+    font-size: 2.4em; 
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.instrucoes p {
+    font-size: 1.2em;
+    line-height: 1.2;
+}
+
+.game-container {
+    border: 2px solid var(--verde-neon);
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 30px;
+    box-shadow: 0 0 15px rgba(57, 255, 20, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 40%;
+    padding: 0 0 35px 0;
+}
+
+.game-container p{
+    font-family: var(--fonte-star-wars);
+    font-size: 2rem;
+    font-weight: bold;
+    letter-spacing: 4px;
+    padding: 20px;
+}
+
+.criar-partida {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.criar-partida p{
+    color: var(--verde-neon);
+    text-shadow: var(--verde-neon) 0px 0px 2px;
+}
+
+.entrar-partida {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.entrar-partida p {
+    color: var(--azul-celeste);
+    text-shadow: var(--azul-celeste) 0px 0px 2px;
+}
+
+.game-container form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    gap: 20px;
+    width: 100%;
+}
+
+.modo-jogo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.modos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 10px;
+}
+
+.titulo-escolha{
+    font-family: var(--fonte-corpo-de-texto);
+    font-size: 1.7rem;
+    color: var(--amarelo-vibrante);
+    text-align: center;
+}
+
+.entrar-partida button, .criar-partida button {
+    background-color: var(--verde-neon);
+    color: var(--preto-profundo);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-family: var(--fonte-corpo-de-texto);
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.entrar-partida button:hover, .criar-partida button:hover {
+    background-color: var(--verde-neon);
+    box-shadow: 0 0 10px rgba(57, 255, 20, 0.8);
+    color: var(--preto-profundo);
+}
+
+
+.entrar-partida form{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+}
+
+.entrar-partida input[type="text"] {
+    font-family: var(--fonte-corpo-de-texto);
+    width: 65%;
+    padding: 10px;
+    border: 1px solid var(--preto-profundo);
+    border-radius: 5px;
+    font-size: 1rem;
+    color: var(--preto-profundo);
+}
+
+.entrar-partida input[type="text"]::placeholder {
+    color: rgba(0, 0, 0, 0.9); 
+    opacity: 1; 
+}
+
+.entrar-partida input:focus {
+    outline: none; 
+    border-color: var(--azul-celeste); 
+    box-shadow: 0 0 5px var(--azul-celeste);
+}
+
+.sabres{
+    width: 20px;
+    height: 20px;
+}

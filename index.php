@@ -8,7 +8,7 @@ require_once './php/conexao_bd.php';
 $error = '';
 
 if (isset($_SESSION['user_id'])) {
-    header('Location: game.php');
+    header('Location: home.php');
     exit();
 }
 
@@ -17,7 +17,7 @@ if (isset($_POST['login'])) {
     $senha = $_POST['senha'];
 
     if(loginUsuario($email, $senha)) {
-        header('Location: game.php'); 
+        header('Location: home.php'); 
         exit();
     } else {
         $error = "E-mail ou senha incorretos.";
