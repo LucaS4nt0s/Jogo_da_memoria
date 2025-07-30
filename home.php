@@ -30,6 +30,7 @@ if (isset($_POST['modo'])) {
     $id_partida = criarPartida($_POST['modo'], $usuario_id);
     $_SESSION['modo'] = $_POST['modo'];
     $_SESSION['id_partida'] = $id_partida;
+    $_SESSION['vez_jogador'] = 1; 
     
     if ($id_partida) {
         header("Location: game.php?id_partida=$id_partida");

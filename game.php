@@ -4,6 +4,7 @@ session_start();
 require_once './php/auth.php';
 require_once './php/conexao_bd.php';
 require_once './php/criar_partidas.php';
+require_once './php/game_logic.php';
 
 if (!isset($_SESSION['usuario_id'])) {
     header('Location: index.php');
@@ -79,6 +80,9 @@ if (isset($_POST['iniciar_jogo'])) {
 }
 
 ?>
+<script>
+    const cartasIniciais = <?php echo json_encode($cartas_jogo); ?>;
+</script>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -130,11 +134,13 @@ if (isset($_POST['iniciar_jogo'])) {
         </div>
         <div class="pontuacao">
             <h2>Pontuação</h2>
-            <span class="pontuacao-1"><p>Jogador 1: <?php echo $_SESSION['pontuacao_1'] ?? 0; ?></p></span>
+            <span class="pontuacao-1"><p></p></span>
             <?php if ($_SESSION['modo'] === 'duo'): ?>
-                <span class="pontuacao-2"><p>Jogador 2: <?php echo $_SESSION['pontuacao_2'] ?? 0; ?></p></span>
+                <span class="pontuacao-2"><p></p></span>
             <?php endif; ?>
+            <span class="vez"><p></p></span>
         </div>
     </main>
+        <script src="./js/game.js"></script>
 </body>
 </html>

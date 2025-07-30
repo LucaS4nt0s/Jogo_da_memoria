@@ -167,3 +167,11 @@ main {
     text-shadow: 0 0 2px var(--vermelho-sangue);
     text-align: left;
 }
+
+.vez{
+    font-family: var(--fonte-corpo-de-texto);
+    font-size: 1.1rem;
+    color: var(--amarelo-vibrante);
+    text-shadow: 0 0 2px var(--amarelo-vibrante);
+    text-align: left;
+}
