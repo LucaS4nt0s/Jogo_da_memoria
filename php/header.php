@@ -1,5 +1,5 @@
 <header>
-    <span class="titulo-header"><h1>Jogo da Memória</h1></span>
+    <span class="titulo-header"><h1><a href="home.php">Jogo da Memória</a></h1></span>
     <div class="botoes-header">
         <span>Bem-vindo, <?php echo htmlspecialchars($usuario['nome']); ?>!</span>
         <form method="POST">
