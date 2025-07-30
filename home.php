@@ -46,17 +46,24 @@ if(isset($_POST['entrar_partida'])) {
     $stmt->execute([$codigo_partida]);
     $partida = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if($partida['modo'] === 'duo' && $partida['jogador2_id'] === null && $partida['usuario_id'] !== $usuario_id) {
-        $stmt = $pdo->prepare("UPDATE partidas SET jogador2_id = ? WHERE id = ?");
-        $stmt->execute([$usuario_id, $codigo_partida]);
-        $_SESSION['modo'] = 'duo';
-        $_SESSION['id_partida'] = $codigo_partida;
-        header("Location: game.php?id_partida=$codigo_partida");
-        exit();
-    } else if($partida['modo'] === 'solo' || $partida['usuario_id'] === $usuario_id) {
-        echo "<script>alert('Não é possível entrar nessa partida.');</script>";
-    }else {
-        echo "<script>alert('Partida não encontrada ou já está cheia.');</script>";
+    if ($partida) {
+        if($partida['modo'] === 'duo' && $partida['jogador2_id'] === null && $partida['usuario_id'] !== $usuario_id) {
+            $stmt = $pdo->prepare("UPDATE partidas SET jogador2_id = ? WHERE id = ?");
+            $stmt->execute([$usuario_id, $codigo_partida]);
+            $_SESSION['modo'] = 'duo';
+            $_SESSION['id_partida'] = $codigo_partida;
+            header("Location: game.php?id_partida=$codigo_partida");
+            exit();
+        } else if($partida['modo'] === 'solo') {
+            echo "<script>alert('Não é possível entrar nessa partida (Modo solo).');</script>";
+        } else if($partida['usuario_id'] === $usuario_id) {
+            echo "<script>alert('Você é o criador da partida');</script>";
+        }
+        else {
+            echo "<script>alert('Partida já está cheia.');</script>";
+        }
+    } else { 
+        echo "<script>alert('Partida não encontrada.');</script>";
     }
 }
 ?>

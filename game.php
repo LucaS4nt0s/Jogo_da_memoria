@@ -25,10 +25,31 @@ if (!$usuario) {
     exit();
 }
 
+if (isset($_SESSION['id_partida'])) {
+    $id_partida = $_SESSION['id_partida'];
+    $stmt = $pdo->prepare("SELECT * FROM partidas WHERE id = ?");
+    $stmt->execute([$id_partida]);
+    $partida = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$partida) {
+        echo "Partida não encontrada.";
+        exit();
+    }
+    if ($partida['usuario_id'] !== $usuario_id && $partida['jogador2_id'] !== $usuario_id) {
+        echo "Você não está participando desta partida.";
+        exit();
+    }
+
+    $_SESSION['pontuacao_1'] = $partida['pontos_jogador1'] ?? 0;
+    $_SESSION['pontuacao_2'] = $partida['pontos_jogador2'] ?? 0;
+
+}
+
 $estado_botao = 'disabled';
 if(isset($_SESSION['modo']) && isset($_SESSION['id_partida'])) {
     $modo = $_SESSION['modo'];
     $id_partida = $_SESSION['id_partida'];
+
+
 
     if ($modo === 'duo') {
         $stmt = $pdo->prepare("SELECT jogador2_id FROM partidas WHERE id = ?");
@@ -106,6 +127,13 @@ if (isset($_POST['iniciar_jogo'])) {
                     <li class="cartas"><img src="./img/starWars.png" alt="Carta 15"></li>
                     <li class="cartas"><img src="./img/starWars.png" alt="Carta 16"></li>
             </div>
+        </div>
+        <div class="pontuacao">
+            <h2>Pontuação</h2>
+            <span class="pontuacao-1"><p>Jogador 1: <?php echo $_SESSION['pontuacao_1'] ?? 0; ?></p></span>
+            <?php if ($_SESSION['modo'] === 'duo'): ?>
+                <span class="pontuacao-2"><p>Jogador 2: <?php echo $_SESSION['pontuacao_2'] ?? 0; ?></p></span>
+            <?php endif; ?>
         </div>
     </main>
 </body>
