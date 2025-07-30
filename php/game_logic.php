@@ -22,7 +22,6 @@ foreach ($todas_as_cartas as $index => $carta) {
         'id' => uniqid(),
         'nome' => $carta,
         'imagem' => "./img/{$carta}.png",
-        'imagem_costas' => "./img/starWars.png"
     ];
 }
 

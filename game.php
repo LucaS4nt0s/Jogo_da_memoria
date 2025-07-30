@@ -82,7 +82,9 @@ if (isset($_POST['iniciar_jogo'])) {
 ?>
 <script>
     const cartasIniciais = <?php echo json_encode($cartas_jogo); ?>;
+    const id_partida = <?php echo json_encode($_SESSION['id_partida'] ?? null); ?>;
 </script>
+
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -113,23 +115,7 @@ if (isset($_POST['iniciar_jogo'])) {
                 </div>
             </div>
             <div class="tabuleiro">
-                <ul>
-                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 1"></li>
-                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 2"></li>
-                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 3"></li>
-                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 4"></li>
-                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 5"></li>
-                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 6"></li>
-                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 7"></li>
-                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 8"></li>
-                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 9"></li>
-                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 10"></li>
-                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 11"></li>
-                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 12"></li>
-                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 13"></li>
-                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 14"></li>
-                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 15"></li>
-                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 16"></li>
+            
             </div>
         </div>
         <div class="pontuacao">
