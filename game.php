@@ -4,6 +4,7 @@ session_start();
 require_once './php/auth.php';
 require_once './php/conexao_bd.php';
 require_once './php/criar_partidas.php';
+
 if (!isset($_SESSION['usuario_id'])) {
     header('Location: index.php');
     exit();
@@ -24,8 +25,23 @@ if (!$usuario) {
     exit();
 }
 
-if( isset($_POST['iniciar_jogo'])) {
-    
+if (isset($_POST['iniciar_jogo'])) {
+    $stmt = $pdo->prepare("SELECT * FROM partidas WHERE id_partida = ?");
+    $stmt->execute([$_SESSION['id_partida']]);
+    $partida = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$partida) {
+        echo "Partida não encontrada.";
+        exit();
+    }
+    if($_SESSION['modo'] === 'duo' && $partida['jogador2_id'] === null) {
+        echo "<script>alert('Aguardando outro jogador.');</script>";
+        exit();
+    }
+    if ($partida['jogador2_id'] === null) {
+        $stmt = $pdo->prepare("UPDATE partidas SET jogador2_id = ? WHERE id_partida = ?");
+        $stmt->execute([$usuario_id, $_SESSION['id_partida']]);
+    }
 }
 
 ?>
@@ -46,10 +62,12 @@ if( isset($_POST['iniciar_jogo'])) {
             <h2>Bem-vindo ao Jogo da Memória!</h2>
             <p>Divirta-se jogando!</p>
             <div class="partida-info">
-                <h3>Partida em andamento</h3>
                 <?php if ($_SESSION['modo'] === 'duo'): ?>
                     <p>Você está jogando no modo Multiplayer.</p>
                     <p>ID da Partida: <?php echo htmlspecialchars($_GET['id_partida']); ?></p>
+                <?php endif; ?>
+                <?php if ($_SESSION['modo'] === 'solo'): ?>
+                    <p>Você está jogando no modo Solo.</p>
                 <?php endif; ?>
                 <p>Cronômetro: <span id="cronometro">00:00</span></p>
             </div>

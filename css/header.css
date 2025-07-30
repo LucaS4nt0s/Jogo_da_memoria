@@ -22,6 +22,7 @@
     --branco-puro: #FFFFFF;
     --amarelo-hover: #CCAC00;
     --verde-neon: #39ff14;
+    --verde-neon-disabled: #b5ffb5;
     --fonte-star-wars: 'Star Jedi';
     --fonte-corpo-de-texto: 'Space Mono', monospace;
     --fonte-secundaria: 'Oswald', sans-serif;
@@ -60,7 +61,7 @@ header {
     width: 100%;
 }
 
-.titulo-header h1 {
+.titulo-header h1 a{
     font-family: var(--fonte-star-wars);
     font-size: 2.5rem;
     font-weight: bold;
@@ -69,7 +70,12 @@ header {
     -webkit-text-stroke-color: #FFE81F; /* Cor do contorno (amarelo Star Wars) */
     text-stroke-width: 1px;
     text-stroke-color: #FFE81F;
-    margin-bottom: 30px;
+    text-decoration: none;
+}
+
+.titulo-header h1 a:hover {
+    color: var(--amarelo-vibrante);
+    text-shadow: 0 0 10px var(--amarelo-hover);
 }
 
 .botoes-header {
