@@ -59,22 +59,20 @@ if (isset($_POST['iniciar_jogo'])) {
     <?php include_once './php/header.php'; ?>
     <main>
         <div class="game-container">
-            <h2>Bem-vindo ao Jogo da Memória!</h2>
-            <p>Divirta-se jogando!</p>
             <div class="partida-info">
                 <?php if ($_SESSION['modo'] === 'duo'): ?>
-                    <p>Você está jogando no modo Multiplayer.</p>
-                    <p>ID da Partida: <?php echo htmlspecialchars($_GET['id_partida']); ?></p>
+                    <p>Você está jogando no modo <span class="modo">Multiplayer</span>.</p>
+                    <p><span class="id_partida">ID da Partida:</span> <?php echo htmlspecialchars($_GET['id_partida']); ?></p>
                 <?php endif; ?>
                 <?php if ($_SESSION['modo'] === 'solo'): ?>
-                    <p>Você está jogando no modo Solo.</p>
+                    <p>Você está jogando no modo <span class="modo">Solo</span>.</p>
                 <?php endif; ?>
-                <p>Cronômetro: <span id="cronometro">00:00</span></p>
-            </div>
-            <div class="controles">
-                <form method="POST">
-                    <button type="submit" name="iniciar_jogo" class="Botao-Iniciar">Iniciar Jogo</button>
-                </form>
+                <p><span class="cronometro">Cronômetro:</span> <span id="cronometro">00:00</span></p>
+                <div class="controles">
+                    <form method="POST">
+                        <button type="submit" name="iniciar_jogo" class="Botao-Iniciar">Iniciar Jogo</button>
+                    </form>
+                </div>
             </div>
             <div class="tabuleiro">
                 <ul>

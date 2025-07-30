@@ -38,6 +38,9 @@ main {
     justify-content: center;
     width: 100%;
     gap: 10px;
+    border: 2px solid var(--amarelo-vibrante);
+    border-radius: 30px;
+    padding: 20px;
 }
 
 .partida-info p{
@@ -45,6 +48,24 @@ main {
     font-size: 1.2rem;
     color: var(--amarelo-vibrante);
     text-align: center;
+}
+
+.modo {
+    font-weight: bold;
+    color: var(--verde-neon);
+    text-shadow: 0 0 2px var(--verde-neon);
+}
+
+.id_partida {
+    font-weight: bold;
+    color: var(--azul-celeste);
+    text-shadow: 0 0 2px var(--azul-celeste);
+}
+
+.cronometro {
+    font-weight: bold;
+    color: var(--vermelho-sangue);
+    text-shadow: 0 0 2px var(--vermelho-sangue);
 }
 
 .Botao-Iniciar {
@@ -107,3 +128,4 @@ main {
     object-fit: cover;
     border-radius: 5px;
 }
+
