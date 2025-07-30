@@ -7,7 +7,7 @@ require_once './php/conexao_bd.php';
 
 $error = '';
 
-if (isset($_SESSION['user_id'])) {
+if (isset($_SESSION['usuario_id'])) {
     header('Location: home.php');
     exit();
 }

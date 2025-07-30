@@ -28,7 +28,9 @@ if (!$usuario) {
 
 if (isset($_POST['modo'])) {
     $id_partida = criarPartida($_POST['modo'], $usuario_id);
-
+    $_SESSION['modo'] = $_POST['modo'];
+    $_SESSION['id_partida'] = $id_partida;
+    
     if ($id_partida) {
         header("Location: game.php?id_partida=$id_partida");
         exit();
@@ -37,17 +39,41 @@ if (isset($_POST['modo'])) {
     }
 
 }
+
+if(isset($_POST['entrar_partida'])) {
+    $codigo_partida = $_POST['codigo_partida'];
+    $stmt = $pdo->prepare("SELECT * FROM partidas WHERE id = ?");
+    $stmt->execute([$codigo_partida]);
+    $partida = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if($partida['modo'] === 'duo' && $partida['jogador2_id'] === null && $partida['usuario_id'] !== $usuario_id) {
+        $stmt = $pdo->prepare("UPDATE partidas SET jogador2_id = ? WHERE id = ?");
+        $stmt->execute([$usuario_id, $codigo_partida]);
+        $_SESSION['modo'] = 'duo';
+        $_SESSION['id_partida'] = $codigo_partida;
+        header("Location: game.php?id_partida=$codigo_partida");
+        exit();
+    } else if($partida['modo'] === 'solo' || $partida['usuario_id'] === $usuario_id) {
+        echo "<script>alert('Não é possível entrar nessa partida.');</script>";
+    }else {
+        echo "<script>alert('Partida não encontrada ou já está cheia.');</script>";
+    }
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/header.css">
+  
     <link rel="stylesheet" href="./css/home.css">
     <title>Jogo da Memória</title>
+
 </head>
+
 <body>
 
     <?php include_once './php/header.php'; ?>
@@ -72,7 +98,7 @@ if (isset($_POST['modo'])) {
                 <p>Entrar em uma partida</p>
                 <form method="POST">
                     <input type="text" name="codigo_partida" placeholder="Código da partida" required>
-                    <button type="submit" class="Botao-Iniciar">Entrar</button>
+                    <button type="submit" name="entrar_partida" class="Botao-Iniciar">Entrar</button>
                 </form>
             </div>
         </div>

@@ -22,6 +22,7 @@
     --branco-puro: #FFFFFF;
     --amarelo-hover: #CCAC00;
     --verde-neon: #39ff14;
+    --verde-neon-disabled: #b5ffb5;
     --fonte-star-wars: 'Star Jedi';
     --fonte-corpo-de-texto: 'Space Mono', monospace;
     --fonte-secundaria: 'Oswald', sans-serif;
@@ -45,7 +46,8 @@ body {
 header {
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
     text-align: center;
     padding: 20px;
@@ -60,16 +62,21 @@ header {
     width: 100%;
 }
 
-.titulo-header h1 {
+.titulo-header h1 a{
     font-family: var(--fonte-star-wars);
-    font-size: 2.5rem;
+    font-size: 2.0rem;
     font-weight: bold;
     color: transparent;
     -webkit-text-stroke-width: 1px; /* Largura do contorno (ajuste conforme necessário) */
     -webkit-text-stroke-color: #FFE81F; /* Cor do contorno (amarelo Star Wars) */
     text-stroke-width: 1px;
     text-stroke-color: #FFE81F;
-    margin-bottom: 30px;
+    text-decoration: none;
+}
+
+.titulo-header h1 a:hover {
+    color: var(--amarelo-vibrante);
+    text-shadow: 0 0 10px var(--amarelo-hover);
 }
 
 .botoes-header {
@@ -82,7 +89,7 @@ header {
 
 .botoes-header span {
     font-family: var(--fonte-corpo-de-texto);
-    font-size: 1.3rem;
+    font-size: 1.3 rem;
     color: var(--amarelo-vibrante);
 }
 
@@ -99,4 +106,27 @@ header {
 .Botao-Logout:hover {
     background-color: var(--vermelho-hover);
     box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+}
+
+.navbar ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap : 20px;
+    list-style: none;
+    padding: 0;
+    font-family: var(--fonte-corpo-de-texto);
+    font-size: 1.3rem;
+}
+
+.navbar a{
+    color: var(--amarelo-vibrante);
+    text-decoration: none;
+}
+
+
+.navbar a:hover {
+    color: var(--amarelo-hover);
+    text-shadow: 0 0 10px var(--amarelo-hover);
 }
