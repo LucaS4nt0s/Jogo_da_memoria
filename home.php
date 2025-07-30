@@ -105,8 +105,9 @@ if(isset($_POST['entrar_partida'])) {
 
         <span class="instrucoes">
         <h2>Instruções do Jogo</h2>
-        <p>O objetivo do jogo é encontrar todos os pares de cartas. Clique em duas cartas para virá-las. Se forem iguais, elas permanecerão viradas. Se não forem, elas serão viradas novamente após um breve período.</p>
-        <p>Boa sorte!</p>
+        <p>O objetivo do jogo é encontrar todos os pares de cartas. 
+            <br>Clique em duas cartas para virá-las. Se forem iguais, elas permanecerão viradas. Se não forem, elas serão viradas novamente após um breve período.</p>
+        <p>Que a força esteja com você!</p>
         </span>
 
 
