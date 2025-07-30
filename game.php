@@ -78,22 +78,22 @@ if (isset($_POST['iniciar_jogo'])) {
             </div>
             <div class="tabuleiro">
                 <ul>
-                    <li class="cartas">1</li>
-                    <li class="cartas">2</li>
-                    <li class="cartas">3</li>
-                    <li class="cartas">4</li>
-                    <li class="cartas">5</li>
-                    <li class="cartas">6</li>
-                    <li class="cartas">7</li>
-                    <li class="cartas">8</li>
-                    <li class="cartas">9</li>
-                    <li class="cartas">10</li>
-                    <li class="cartas">11</li>
-                    <li class="cartas">12</li>
-                    <li class="cartas">13</li>
-                    <li class="cartas">14</li>
-                    <li class="cartas">15</li>
-                    <li class="cartas">16</li>
+                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 1"></li>
+                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 2"></li>
+                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 3"></li>
+                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 4"></li>
+                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 5"></li>
+                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 6"></li>
+                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 7"></li>
+                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 8"></li>
+                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 9"></li>
+                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 10"></li>
+                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 11"></li>
+                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 12"></li>
+                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 13"></li>
+                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 14"></li>
+                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 15"></li>
+                    <li class="cartas"><img src="./img/starWars.png" alt="Carta 16"></li>
             </div>
         </div>
     </main>
