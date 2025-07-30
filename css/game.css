@@ -98,6 +98,7 @@ main {
 
 .tabuleiro li:hover {
     box-shadow: 0 0 10px var(--vermelho-sangue);
+    transform: scale(1.05);
 }
 
 .tabuleiro img {
