@@ -14,6 +14,7 @@ main {
     justify-content: center;
     width: 100%;
     padding: 20px;
+    gap: 30px;
 }
 
 .game-container h2 {
@@ -67,4 +68,41 @@ main {
     background-color: var(--verde-neon);
     color: var(--preto-profundo);
     box-shadow: 0 0 10px var(--verde-neon);
+}
+
+.tabuleiro ul{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    width: 100%;
+    max-width: 800px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.tabuleiro li {
+    max-width: 120px;
+    height: 120px;
+    background-color: var(--preto-profundo);
+    box-shadow: 0 0 5px var(--verde-neon);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.tabuleiro li:hover {
+    box-shadow: 0 0 10px var(--vermelho-sangue);
+}
+
+.tabuleiro img {
+    width: 80%;
+    height: 80%;
+    object-fit: cover;
+    border-radius: 5px;
 }
