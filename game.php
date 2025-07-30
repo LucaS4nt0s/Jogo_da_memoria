@@ -25,6 +25,23 @@ if (!$usuario) {
     exit();
 }
 
+$estado_botao = 'disabled';
+if(isset($_SESSION['modo']) && isset($_SESSION['id_partida'])) {
+    $modo = $_SESSION['modo'];
+    $id_partida = $_SESSION['id_partida'];
+
+    if ($modo === 'duo') {
+        $stmt = $pdo->prepare("SELECT jogador2_id FROM partidas WHERE id = ?");
+        $stmt->execute([$id_partida]);
+        $partida = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($partida && $partida['jogador2_id'] !== null) {
+            $estado_botao = '';
+        }
+    } else if ($modo === 'solo') {
+        $estado_botao = '';
+    }
+} 
+
 if (isset($_POST['iniciar_jogo'])) {
     $stmt = $pdo->prepare("SELECT * FROM partidas WHERE id_partida = ?");
     $stmt->execute([$_SESSION['id_partida']]);
@@ -35,12 +52,8 @@ if (isset($_POST['iniciar_jogo'])) {
         exit();
     }
     if($_SESSION['modo'] === 'duo' && $partida['jogador2_id'] === null) {
-        echo "<script>alert('Aguardando outro jogador.');</script>";
+        echo "<script>alert('Jogador 2 não conectado');</script>";
         exit();
-    }
-    if ($partida['jogador2_id'] === null) {
-        $stmt = $pdo->prepare("UPDATE partidas SET jogador2_id = ? WHERE id_partida = ?");
-        $stmt->execute([$usuario_id, $_SESSION['id_partida']]);
     }
 }
 
@@ -70,7 +83,7 @@ if (isset($_POST['iniciar_jogo'])) {
                 <p><span class="cronometro">Cronômetro:</span> <span id="cronometro">00:00</span></p>
                 <div class="controles">
                     <form method="POST">
-                        <button type="submit" name="iniciar_jogo" class="Botao-Iniciar">Iniciar Jogo</button>
+                        <button type="submit" name="iniciar_jogo" class="Botao-Iniciar" <?php echo $estado_botao; ?>>Iniciar Jogo</button>
                     </form>
                 </div>
             </div>
