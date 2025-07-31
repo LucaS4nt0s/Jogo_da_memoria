@@ -1,6 +1,5 @@
 <?php
 session_start();
-require_once './php/auth.php';
 require_once './php/conexao_bd.php';
 require_once './php/criar_partidas.php';
 require_once './php/game_logic.php';
@@ -83,16 +82,6 @@ if (isset($_POST['iniciar_jogo'])) {
     }
 }
 ?>
-
-<script>
-    const cartasIniciais = <?php echo json_encode($cartas_jogo); ?>;
-    const id_partida = <?php echo json_encode($_SESSION['id_partida'] ?? null); ?>;
-    const modo = <?php echo json_encode($_SESSION['modo'] ?? ''); ?>;
-    const id_jogador1 = <?php echo json_encode($id_jogador1); ?>;
-    const id_jogador2 = <?php echo json_encode($id_jogador2); ?>;
-</script>
-
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -101,6 +90,13 @@ if (isset($_POST['iniciar_jogo'])) {
     <title>Jogo da Memória</title>
     <link rel="stylesheet" href="./css/header.css">
     <link rel="stylesheet" href="./css/game.css">
+    <script>
+        const cartasIniciais = <?php echo json_encode($cartas_jogo); ?>;
+        const id_partida = <?php echo json_encode($_SESSION['id_partida'] ?? null); ?>;
+        const modo = <?php echo json_encode($_SESSION['modo'] ?? ''); ?>;
+        const id_jogador1 = <?php echo json_encode($id_jogador1); ?>;
+        const id_jogador2 = <?php echo json_encode($id_jogador2); ?>;
+    </script>
 </head>
 <body>
     <?php include_once './php/header.php'; ?>

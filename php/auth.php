@@ -1,5 +1,5 @@
 <?php
-require_once 'conexao_bd.php';
+include_once 'conexao_bd.php';
 
 function registrarUsuario($nome, $email, $senha){
     global $pdo;
@@ -41,4 +41,3 @@ function loginUsuario($email, $senha){
     }
 }
 
-?>
