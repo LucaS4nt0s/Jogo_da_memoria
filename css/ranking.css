@@ -1,0 +1,206 @@
+        :root {
+            --preto-profundo: #000000;
+            --amarelo-vibrante: #FEE715;
+            --azul-celeste: #87CEEB;
+            --verde-neon: #39FF14;
+            --branco-galactico: #EAEAEA;
+        }
+
+        /* Estilo base do corpo da página */
+        body {
+            background-color: var(--preto-profundo);
+            background-image: url('https://www.transparenttextures.com/patterns/stardust.png'); /* Fundo de estrelas sutil */
+            color: var(--branco-galactico);
+            font-family: var(--fonte-corpo-de-texto);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Estilo do Header */
+        .header {
+            background-color: rgba(10, 10, 10, 0.8);
+            border-bottom: 2px solid var(--verde-neon);
+            padding: 15px 0;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header .logo h1 {
+    
+            color: var(--amarelo-vibrante);
+            text-shadow: 0 0 5px var(--amarelo-vibrante);
+            margin: 0;
+            font-size: 1.8em;
+        }
+
+        .header .nav a, .header .nav button {
+        
+            color: var(--branco-galactico);
+            background-color: transparent;
+            border: 1px solid var(--azul-celeste);
+            padding: 8px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header .nav a:hover, .header .nav button:hover {
+            background-color: var(--azul-celeste);
+            color: var(--preto-profundo);
+            box-shadow: 0 0 10px var(--azul-celeste);
+        }
+
+        .header .nav .logout-btn {
+            border-color: #ff4d4d;
+        }
+        .header .nav .logout-btn:hover {
+            background-color: #ff4d4d;
+            box-shadow: 0 0 10px #ff4d4d;
+            color: var(--preto-profundo);
+        }
+
+
+        /* Estilo da Tela de Ranking */
+        #ranking-screen {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 20px 0;
+        }
+
+        #ranking-screen .container {
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--verde-neon);
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.5);
+            padding: 25px;
+        }
+
+        .screen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--verde-neon);
+            padding-bottom: 15px;
+        }
+
+        .screen-header h2 {
+            font-family: var(--fonte-star-wars);
+            font-size: 2.5em;
+            color: var(--amarelo-vibrante);
+            margin: 0;
+            letter-spacing: 2px;
+        }
+
+        .btn {
+            cursor: pointer;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--branco-galactico);
+            color: var(--branco-galactico);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--branco-galactico);
+            color: var(--preto-profundo);
+        }
+
+        /* Abas do Ranking */
+        .ranking-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 1px solid var(--azul-celeste);
+            color: var(--azul-celeste);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: var(--azul-celeste);
+            color: var(--preto-profundo);
+            box-shadow: 0 0 8px var(--azul-celeste);
+        }
+
+        .tab-btn.active {
+            background-color: var(--verde-neon);
+            color: var(--preto-profundo);
+            border-color: var(--verde-neon);
+            font-weight: bold;
+            box-shadow: 0 0 10px var(--verde-neon);
+        }
+
+        /* Tabela do Ranking */
+        .ranking-table-container {
+            overflow-x: auto; /* Para responsividade em telas pequenas */
+        }
+
+        .ranking-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .ranking-table th, .ranking-table td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(57, 255, 20, 0.3);
+        }
+
+        .ranking-table thead {
+            background-color: rgba(57, 255, 20, 0.2);
+        }
+
+        .ranking-table th {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--verde-neon);
+            font-size: 1.1em;
+        }
+
+        .ranking-table tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .ranking-table td {
+            font-size: 1em;
+            color: var(--branco-galactico);
+        }
+
+        /* Estilo para a primeira coluna (Posição) */
+        .ranking-table td:first-child {
+            font-weight: bold;
+            color: var(--amarelo-vibrante);
+            font-size: 1.2em;
+        }
