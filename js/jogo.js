@@ -1,16 +1,50 @@
 document.addEventListener('DOMContentLoaded', () => {  
     const tabuleiro = document.querySelector('.tabuleiro');
-    const cartas = document.querySelectorAll('.cartas');
 
     let cartasViradas = [];
     let bloqueioJogo = false;
     let pontosJogador1 = 0;
     let pontosJogador2 = 0;
     let jogadorAtual = 1; 
+    let tempo = 0;
+    let intervaloCronometro;
+    let vencedor = null;
+    let cartas;
 
     const placarJogador1 = document.querySelector('.pontuacao-1 p');
     const placarJogador2 = document.querySelector('.pontuacao-2 p');
     const vezJogador = document.querySelector('.vez p');
+    const botaoIniciar = document.querySelector('.Botao-Iniciar');
+    const cronometroDisplay = document.querySelector('#cronometro');
+
+
+    function formatarTempo(segundos) {
+        const minutos = Math.floor(segundos / 60);
+        const segundosRestantes = segundos % 60;
+        return `${minutos.toString().padStart(2, '0')}:${segundosRestantes.toString().padStart(2, '0')}`;
+    }
+
+    function atualizarCronometro() {
+        if(cronometroDisplay) {
+            cronometroDisplay.textContent = formatarTempo(tempo);
+        }
+    }
+
+    function iniciarCronometro() {
+        if(!intervaloCronometro) {
+            intervaloCronometro = setInterval(() => {
+                tempo++;
+                atualizarCronometro();
+            }, 1000);
+        }
+    }
+
+    function pararCronometro() {
+        if(intervaloCronometro) {
+            clearInterval(intervaloCronometro);
+            intervaloCronometro = null;
+        }
+    }
 
     function atualizarPlacar(){
         if (placarJogador1) {
@@ -26,20 +60,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function criarCartaElemento(dadosCarta){
         const carta = document.createElement('div');
-        carta.addEventListener('click', virarCarta);
         carta.classList.add('cartas');
         carta.dataset.idUnico = dadosCarta.id;
         carta.dataset.nome = dadosCarta.nome;
         
         const frenteCarta = document.createElement('div');
-        frenteCarta.classList.add('frente', 'escondida');
+        frenteCarta.classList.add('faces-das-cartas', 'frente');
         const imagemFrente = document.createElement('img');
         imagemFrente.src = dadosCarta.imagem;
         imagemFrente.alt = dadosCarta.nome;
         frenteCarta.appendChild(imagemFrente);
 
         const versoCarta = document.createElement('div');
-        versoCarta.classList.add('verso');
+        versoCarta.classList.add('faces-das-cartas', 'verso');
         const imagemVerso = document.createElement('img');
         imagemVerso.src = './img/starWars.png';
         imagemVerso.alt = 'Verso da carta';
@@ -48,13 +81,11 @@ document.addEventListener('DOMContentLoaded', () => {
         carta.appendChild(frenteCarta);
         carta.appendChild(versoCarta);
 
+        carta.classList.add('escondida');
+        carta.addEventListener('click', virarCarta);
+
         return carta;
     }
-
-    cartasIniciais.forEach(dadosCarta => {
-        const cartaElemento = criarCartaElemento(dadosCarta);
-        tabuleiro.appendChild(cartaElemento);
-    });
 
     atualizarPlacar();
 
@@ -91,8 +122,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             atualizarPlacar();
             mandarPontuacaoParaPHP(jogadorAtual, jogadorAtual === 1 ? pontosJogador1 : pontosJogador2);
+            resetarTabuleiro();
+            verificarFimDeJogo();
         }else{
             virarCartasDeVolta(carta1, carta2);
+            resetarTabuleiro();
             trocarJogador();
         }
     }
@@ -107,11 +141,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function desabilitarCartas(carta1, carta2) {
+        debugger;
         carta1.removeEventListener('click', virarCarta);
         carta2.removeEventListener('click', virarCarta);
 
         carta1.classList.add('par');
         carta2.classList.add('par');
+
+        carta1.classList.remove('escondida');
+        carta1.classList.add('virada');
+        carta2.classList.remove('escondida');
+        carta2.classList.add('virada');
 
         resetarTabuleiro();
         verificarFimDeJogo();
@@ -123,6 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function trocarJogador() {
+        if (modo === 'solo') return;
         jogadorAtual = jogadorAtual === 1 ? 2 : 1;
         atualizarPlacar();
     }
@@ -136,11 +177,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (pontosJogador1 > pontosJogador2) {
                 alert(`Jogador 1 venceu com ${pontosJogador1} pontos!`);
+                vencedor = id_jogador1;
             } else if (pontosJogador2 > pontosJogador1) {
                 alert(`Jogador 2 venceu com ${pontosJogador2} pontos!`);
+                vencedor = id_jogador2;
             } else {
                 alert('Empate!');
+                vencedor = 'Empate';
             }
+            pararCronometro();
+            mandarDadosDeFimDeJogoParaPHP(tempo, vencedor);
+            atualizarCronometro();
+            botaoIniciar.textContent = 'Reiniciar Jogo';
+            botaoIniciar.disabled = false;
+            tabuleiro.classList.add('pausado');
+            pontosJogador1 = 0;
+            pontosJogador2 = 0;
+            jogadorAtual = 1;
+            tempo = 0;
+            vencedor = null;
+            atualizarPlacar();
         }
     }
 
@@ -179,4 +235,68 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Erro ao atualizar pontuação:', error);
         });
     }
+
+    function mandarDadosDeFimDeJogoParaPHP(tempoFinal, vencedor) {
+        if(!id_partida) {
+            console.error('ID da partida não definido.');
+            return;
+        }
+
+        console.log(`Enviando dados de fim de jogo para o PHP: ID da partida ${id_partida}, Tempo final ${tempoFinal}, Vencedor ${vencedor}`);
+        fetch('./php/fim_de_jogo.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id_partida: id_partida,
+                tempo_final: tempoFinal,
+                vencedor: vencedor
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao enviar dados de fim de jogo para o PHP');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                console.log('Dados de fim de jogo enviados com sucesso');
+            } else {
+                console.error('Erro ao enviar dados de fim de jogo:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao enviar dados de fim de jogo:', error);
+        });
+    }
+
+    function inicializarJogo() {
+        tabuleiro.innerHTML = '';
+
+        const cartasEmbaralhadas = [...cartasIniciais].sort(() => Math.random() - 0.5);
+        cartasEmbaralhadas.forEach(dadosCarta => {
+            const cartaElemento = criarCartaElemento(dadosCarta);
+            tabuleiro.appendChild(cartaElemento);
+        });
+        cartas = document.querySelectorAll('.cartas');
+        
+        atualizarPlacar();
+        atualizarCronometro();
+        
+    }
+
+    botaoIniciar.addEventListener('click', () => {
+        tabuleiro.classList.remove('pausado');
+        botaoIniciar.disabled = true;
+        iniciarCronometro();
+        console.log('Jogo iniciado');
+
+        if(botaoIniciar.textContent === 'Reiniciar Jogo') {
+            inicializarJogo();
+        }
+    });
+
+    inicializarJogo();
 });
