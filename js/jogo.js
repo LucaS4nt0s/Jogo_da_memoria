@@ -81,7 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
         carta.appendChild(frenteCarta);
         carta.appendChild(versoCarta);
 
-        carta.classList.add('escondida');
         carta.addEventListener('click', virarCarta);
 
         return carta;
@@ -94,7 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (this.classList.contains('virada')) return;
         if (this === cartasViradas[0]) return;
 
-        this.classList.remove('escondida');
         this.classList.add('virada');
 
         cartasViradas.push(this);
@@ -122,11 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             atualizarPlacar();
             mandarPontuacaoParaPHP(jogadorAtual, jogadorAtual === 1 ? pontosJogador1 : pontosJogador2);
-            resetarTabuleiro();
-            verificarFimDeJogo();
         }else{
             virarCartasDeVolta(carta1, carta2);
-            resetarTabuleiro();
             trocarJogador();
         }
     }
@@ -134,24 +129,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function virarCartasDeVolta(carta1, carta2) {
         setTimeout(() => {
             carta1.classList.remove('virada');
-            carta1.classList.add('escondida');
             carta2.classList.remove('virada');
-            carta2.classList.add('escondida');
-        }, 1500);
+
+            resetarTabuleiro();
+        }, 1000);
     }
 
     function desabilitarCartas(carta1, carta2) {
-        debugger;
         carta1.removeEventListener('click', virarCarta);
         carta2.removeEventListener('click', virarCarta);
 
         carta1.classList.add('par');
         carta2.classList.add('par');
-
-        carta1.classList.remove('escondida');
-        carta1.classList.add('virada');
-        carta2.classList.remove('escondida');
-        carta2.classList.add('virada');
 
         resetarTabuleiro();
         verificarFimDeJogo();
@@ -186,17 +175,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 vencedor = 'Empate';
             }
             pararCronometro();
-            mandarDadosDeFimDeJogoParaPHP(tempo, vencedor);
-            atualizarCronometro();
-            botaoIniciar.textContent = 'Reiniciar Jogo';
-            botaoIniciar.disabled = false;
-            tabuleiro.classList.add('pausado');
-            pontosJogador1 = 0;
-            pontosJogador2 = 0;
-            jogadorAtual = 1;
-            tempo = 0;
-            vencedor = null;
-            atualizarPlacar();
+            mandarDadosDeFimDeJogoParaPHP(tempo, vencedor)
+            .then(() => {
+                botaoIniciar.textContent = 'Reiniciar Jogo';
+                botaoIniciar.disabled = false;
+                tabuleiro.classList.add('pausado');
+
+                pontosJogador1 = 0;
+                pontosJogador2 = 0;
+                jogadorAtual = 1;
+                tempo = 0;
+                vencedor = null;
+                atualizarPlacar(); 
+                atualizarCronometro(); 
+
+            })
+            .catch(error => {
+                console.error('Falha ao enviar dados de fim de jogo, o jogo não foi resetado automaticamente:', error);
+            });
         }
     }
 
@@ -225,10 +221,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.json();
         })
         .then(data => {
-            if (data.success) {
-                console.log(`Pontuação do jogador ${numeroDoJogador} atualizada com sucesso: novo total de pontos é ${pontos}`);
+            if (data.sucesso) { 
+                console.log(`Pontuação do jogador ${numeroDoJogador} atualizada com sucesso: ${data.mensagem}`); 
             } else {
-                console.error('Erro ao atualizar pontuação:', data.message);
+                console.error('Erro ao atualizar a pontuação:', data.mensagem); 
             }
         })
         .catch(error => {
@@ -237,41 +233,47 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function mandarDadosDeFimDeJogoParaPHP(tempoFinal, vencedor) {
-        if(!id_partida) {
-            console.error('ID da partida não definido.');
-            return;
-        }
-
-        console.log(`Enviando dados de fim de jogo para o PHP: ID da partida ${id_partida}, Tempo final ${tempoFinal}, Vencedor ${vencedor}`);
-        fetch('./php/fim_de_jogo.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id_partida: id_partida,
-                tempo_final: tempoFinal,
-                vencedor: vencedor
-            })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erro ao enviar dados de fim de jogo para o PHP');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                console.log('Dados de fim de jogo enviados com sucesso');
-            } else {
-                console.error('Erro ao enviar dados de fim de jogo:', data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Erro ao enviar dados de fim de jogo:', error);
-        });
+    if(!id_partida) {
+        console.error('ID da partida não definido.');
+        return Promise.reject(new Error('ID da partida não definido.'));
     }
 
+    console.log(`Enviando dados de fim de jogo para o PHP: ID da partida ${id_partida}, Tempo final ${tempoFinal}, Vencedor ${vencedor}`);
+
+    return fetch('./php/fim_de_jogo.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id_partida: id_partida,
+            tempo_final: tempoFinal,
+            vencedor: vencedor
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().catch(() => {
+                throw new Error(`Erro HTTP: ${response.status} ${response.statusText}`);
+            }).then(errorData => {
+                throw new Error(`Erro do servidor: ${errorData.mensagem || 'Desconhecido'}`);
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.sucesso) {
+            console.log('Dados de fim de jogo enviados com sucesso', data.mensagem);
+            return data; 
+        } else {
+            throw new Error(data.mensagem);
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao enviar dados de fim de jogo:', error);
+        throw error; 
+    });
+}
     function inicializarJogo() {
         tabuleiro.innerHTML = '';
 

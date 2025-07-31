@@ -1,5 +1,4 @@
 <?php
-
 $cartas = [
     'bemSolo',
     'chewie',
@@ -10,7 +9,6 @@ $cartas = [
     'obiWan',
     'yoda'
 ];
-
 
 $todas_as_cartas = array_merge($cartas, $cartas);
 
@@ -24,5 +22,3 @@ foreach ($todas_as_cartas as $index => $carta) {
         'imagem' => "./img/{$carta}.png",
     ];
 }
-
-?>

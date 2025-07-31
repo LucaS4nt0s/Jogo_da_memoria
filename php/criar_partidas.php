@@ -1,6 +1,5 @@
 <?php
-
-include_once './php/conexao_bd.php';
+include_once 'conexao_bd.php';
 
 function criarPartida($modo, $usuario_id) {
     global $pdo;
@@ -15,4 +14,3 @@ function criarPartida($modo, $usuario_id) {
 
     return false;
 }
-
