@@ -136,15 +136,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function desabilitarCartas(carta1, carta2) {
-        carta1.removeEventListener('click', virarCarta);
-        carta2.removeEventListener('click', virarCarta);
+    carta1.removeEventListener('click', virarCarta);
+    carta2.removeEventListener('click', virarCarta);
 
-        carta1.classList.add('par');
-        carta2.classList.add('par');
+    carta1.classList.add('par');
+    carta2.classList.add('par');
 
+    
+    setTimeout(() => {
         resetarTabuleiro();
         verificarFimDeJogo();
-    }
+    }, 100); 
+}
 
     function resetarTabuleiro() {
         cartasViradas = [];
