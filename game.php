@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 require_once './php/auth.php';
 require_once './php/conexao_bd.php';
@@ -16,6 +15,11 @@ if (isset($_POST['logout'])) {
     header('Location: index.php');
     exit();
 }
+
+$id_partida = $_SESSION['id_partida'] ?? null;
+$modo = $_SESSION['modo'] ?? '';
+$id_jogador1 = $_SESSION['usuario_id'] ?? null;
+$id_jogador2 = null; 
 
 $usuario_id = $_SESSION['usuario_id'];
 $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE id = ?");
@@ -50,14 +54,14 @@ if(isset($_SESSION['modo']) && isset($_SESSION['id_partida'])) {
     $modo = $_SESSION['modo'];
     $id_partida = $_SESSION['id_partida'];
 
-
-
     if ($modo === 'duo') {
         $stmt = $pdo->prepare("SELECT jogador2_id FROM partidas WHERE id = ?");
         $stmt->execute([$id_partida]);
         $partida = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($partida && $partida['jogador2_id'] !== null) {
             $estado_botao = '';
+            $id_jogador2 = $partida['jogador2_id'];
+            $id_jogador1 = $usuario_id;
         }
     } else if ($modo === 'solo') {
         $estado_botao = '';
@@ -78,11 +82,14 @@ if (isset($_POST['iniciar_jogo'])) {
         exit();
     }
 }
-
 ?>
+
 <script>
     const cartasIniciais = <?php echo json_encode($cartas_jogo); ?>;
     const id_partida = <?php echo json_encode($_SESSION['id_partida'] ?? null); ?>;
+    const modo = <?php echo json_encode($_SESSION['modo'] ?? ''); ?>;
+    const id_jogador1 = <?php echo json_encode($id_jogador1); ?>;
+    const id_jogador2 = <?php echo json_encode($id_jogador2); ?>;
 </script>
 
 
@@ -109,12 +116,10 @@ if (isset($_POST['iniciar_jogo'])) {
                 <?php endif; ?>
                 <p><span class="cronometro">Cronômetro:</span> <span id="cronometro">00:00</span></p>
                 <div class="controles">
-                    <form method="POST">
-                        <button type="submit" name="iniciar_jogo" class="Botao-Iniciar" <?php echo $estado_botao; ?>>Iniciar Jogo</button>
-                    </form>
+                    <button class="Botao-Iniciar" <?php echo $estado_botao; ?>>Iniciar Jogo</button>
                 </div>
             </div>
-            <div class="tabuleiro">
+            <div class="tabuleiro pausado">
             
             </div>
         </div>
@@ -127,6 +132,6 @@ if (isset($_POST['iniciar_jogo'])) {
             <span class="vez"><p></p></span>
         </div>
     </main>
-        <script src="./js/game.js"></script>
+    <script src="./js/jogo.js"></script>
 </body>
 </html>
