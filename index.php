@@ -1,11 +1,12 @@
 <?php
 
-session_start();
+session_start(); 
 
 require_once './php/auth.php';
-require_once './php/conexao_bd.php';
+require_once './php/conexao_bd.php'; 
 
-$error = '';
+$login_error_message = ''; 
+
 
 if (isset($_SESSION['usuario_id'])) {
     header('Location: home.php');
@@ -16,15 +17,18 @@ if (isset($_POST['login'])) {
     $email = trim($_POST['email']);
     $senha = $_POST['senha'];
 
-    if(loginUsuario($email, $senha)) {
-        header('Location: home.php'); 
+   
+    $login_resultado = loginUsuario($email, $senha);
+
+    if ($login_resultado['success']) {
+      
+        header('Location: home.php');
         exit();
     } else {
-        $error = "E-mail ou senha incorretos.";
+      
+        $login_error_message = $login_resultado['message'];
     }
-}   
-
-
+}
 ?>
 
 <!DOCTYPE html>
@@ -42,13 +46,15 @@ if (isset($_POST['login'])) {
     <h1>Jogo da memória</h1>
     <form method="POST">
         <h2>Login</h2>
-        <?php if (!empty($error)): ?>
-            <p class="error-message"><?php echo $error; ?></p>
+        <?php if (!empty($login_error_message)): ?>
+            <p class="error-message" style="color: red; text-align: center; margin-bottom: 15px;">
+                <?php echo htmlspecialchars($login_error_message); ?>
+            </p>
         <?php endif; ?>
         <div class="container-input">
             <div>
                 <label for="email">E-mail:</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" required value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>">
             </div>
             <div>
                 <label for="senha">Senha:</label>

@@ -1,8 +1,8 @@
 <?php
 
 session_start();
-require_once './php/auth.php';
-require_once './php/conexao_bd.php';
+require_once './php/auth.php'; 
+require_once './php/conexao_bd.php'; 
 
 
 if (!isset($_SESSION['usuario_id'])) {
@@ -16,6 +16,7 @@ if (isset($_POST['logout'])) {
     exit();
 }
 
+
 $usuario_id = $_SESSION['usuario_id'];
 $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE id = ?");
 $stmt->execute([$usuario_id]);
@@ -27,18 +28,18 @@ if (!$usuario) {
 }
 
 if (isset($_POST['modo'])) {
+   
     $id_partida = criarPartida($_POST['modo'], $usuario_id);
     $_SESSION['modo'] = $_POST['modo'];
     $_SESSION['id_partida'] = $id_partida;
-    $_SESSION['vez_jogador'] = 1; 
-    
+    $_SESSION['vez_jogador'] = 1;
+
     if ($id_partida) {
         header("Location: game.php?id_partida=$id_partida");
         exit();
     } else {
         echo "<script>alert('Erro ao criar partida. Tente novamente.');</script>";
     }
-
 }
 
 if(isset($_POST['entrar_partida'])) {
@@ -63,7 +64,7 @@ if(isset($_POST['entrar_partida'])) {
         else {
             echo "<script>alert('Partida já está cheia.');</script>";
         }
-    } else { 
+    } else {
         echo "<script>alert('Partida não encontrada.');</script>";
     }
 }
@@ -71,22 +72,18 @@ if(isset($_POST['entrar_partida'])) {
 
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/header.css">
-  
     <link rel="stylesheet" href="./css/ranking.css">
-    <title>Jogo da Memória</title>
-
+    <title>Jogo da Memória - Hall da Fama</title>
 </head>
-
 <body>
 
     <?php include_once './php/header.php'; ?>
-    
-   <main id="ranking-screen" class="screen">
+
+    <main id="ranking-screen" class="screen">
         <div class="container">
             <div class="screen-header">
                 <h2>Hall da Fama</h2>
@@ -101,101 +98,114 @@ if(isset($_POST['entrar_partida'])) {
                 <div class="ranking-table-container">
                     <table id="ranking-table" class="ranking-table">
                         <thead>
-                           
-                        </thead>
+                            </thead>
                         <tbody id="ranking-tbody">
-                           
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </main>
-      <script>
 
-      
-
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
-          const tabs = document.querySelectorAll('.tab-btn');
+            const tabs = document.querySelectorAll('.tab-btn');
             const tableHead = document.querySelector('#ranking-table thead');
             const tableBody = document.getElementById('ranking-tbody');
             const closeButton = document.getElementById('btn-fechar-ranking');
 
+            // Event listener para o botão "Voltar"
             closeButton.addEventListener('click', () => {
                 window.location.href = 'index.php'; 
             });
 
-
-            const dummyData = {
-                geral: {
-                    headers: ['Posição', 'Jogador', 'Pontos Totais', 'Partidas', 'Vitórias', 'Melhor Tempo'],
-                    rows: [
-                    
-                        ['1', 'Chewbacca', '12000', '55', '35', '01:30'],
-                        ['2', 'Darth Vader', '11500', '40', '38', '01:10']
-                    ]
-                },
-                pontos: {
-                    headers: ['Posição', 'Jogador', 'Maior Pontuação', 'Data'],
-                    rows: [
-                        ['1', 'Darth Vader', '550', '25/05/2024'],
-                        ['2', 'Chewbacca', '485', '18/05/2024']
-                    ]
-                },
-                tempo: {
-                    headers: ['Posição', 'Jogador', 'Melhor Tempo', 'Dificuldade'],
-                    rows: [
-                        ['1', 'Yoda', '00:58', 'Difícil'],
-                        ['2', 'Darth Vader', '01:10', 'Difícil'],
-            
-                    ]
-                }
-            };
-
-            
-            function renderTable(tabName) {
-                const data = dummyData[tabName];
+            async function fetchAndRenderTable(tabName) {
+                let url = '';
                 
-              
-                tableHead.innerHTML = '';
-                tableBody.innerHTML = '';
+                switch (tabName) {
+                    case 'geral':
+                        url = './php/ranking_geral.php';
+                        break;
+                    case 'pontos':
+                        url = './php/ranking_pontos.php';
+                        break;
+                    case 'tempo':
+                        url = './php/ranking_tempo.php';
+                        break;
+                    default:
+                        console.error('Aba de ranking desconhecida:', tabName);
+                        return;
+                }
 
+                try {
+                   
+                    const response = await fetch(url);
+                    if (!response.ok) { 
+                        throw new Error(`Erro HTTP! status: ${response.status}`);
+                    }
+                    const data = await response.json(); 
+
+                    if (data.success) {
+                        
+                        renderTable(data.headers, data.rows);
+                    } else {
+                        
+                        console.error('Erro ao buscar dados do ranking:', data.message);
+                        tableHead.innerHTML = ''; 
+                        tableBody.innerHTML = `<tr><td colspan="${data.headers ? data.headers.length : 6}">Erro ao carregar dados: ${data.message}</td></tr>`;
+                    }
+                } catch (error) {
+                    console.error('Falha ao buscar dados do ranking:', error);
+                    tableHead.innerHTML = ''; 
+                    tableBody.innerHTML = `<tr><td colspan="6">Não foi possível conectar ao servidor ou houve um erro inesperado.</td></tr>`;
+                }
+            }
+
+           
+            function renderTable(headers, rows) {
+                tableHead.innerHTML = '';
+                tableBody.innerHTML = ''; 
                 
                 const headerRow = document.createElement('tr');
-                data.headers.forEach(headerText => {
+                headers.forEach(headerText => {
                     const th = document.createElement('th');
                     th.textContent = headerText;
                     headerRow.appendChild(th);
                 });
                 tableHead.appendChild(headerRow);
 
-                
-                data.rows.forEach(rowData => {
-                    const row = document.createElement('tr');
-                    rowData.forEach(cellData => {
-                        const td = document.createElement('td');
-                        td.textContent = cellData;
-                        row.appendChild(td);
+               
+                if (rows.length === 0) {
+                    const noDataRow = document.createElement('tr');
+                    const td = document.createElement('td');
+                    td.setAttribute('colspan', headers.length); 
+                    td.textContent = 'Nenhum dado encontrado para este ranking.';
+                    noDataRow.appendChild(td);
+                    tableBody.appendChild(noDataRow);
+                } else {
+                    rows.forEach(rowData => {
+                        const row = document.createElement('tr');
+                        rowData.forEach(cellData => {
+                            const td = document.createElement('td');
+                            td.textContent = cellData;
+                            row.appendChild(td);
+                        });
+                        tableBody.appendChild(row);
                     });
-                    tableBody.appendChild(row);
-                });
+                }
             }
 
-           
+            
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => {
-                    
                     tabs.forEach(t => t.classList.remove('active'));
-                   
                     tab.classList.add('active');
-                    
                     const tabName = tab.getAttribute('data-tab');
-                    renderTable(tabName);
+                    fetchAndRenderTable(tabName);
                 });
             });
 
-            
-            renderTable('geral');
+            fetchAndRenderTable('geral');
         });
     </script>
 </body>
