@@ -42,7 +42,7 @@ if (isset($_POST['modo'])) {
 }
 
 if(isset($_POST['entrar_partida'])) {
-    $codigo_partida = $_POST['codigo_partida'];
+    $codigo_partida = trim($_POST['codigo_partida']);
     $stmt = $pdo->prepare("SELECT * FROM partidas WHERE id = ?");
     $stmt->execute([$codigo_partida]);
     $partida = $stmt->fetch(PDO::FETCH_ASSOC);
