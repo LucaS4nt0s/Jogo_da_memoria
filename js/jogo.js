@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let cartasViradas = [];
     let bloqueioJogo = false;
+    let transicaoEmAndamento = false; // Nova variável para controlar transições
     let pontosJogador1 = 0;
     let pontosJogador2 = 0;
     let jogadorAtual = 1; 
@@ -30,6 +31,60 @@ document.addEventListener('DOMContentLoaded', () => {
     let checkPlayerStatusInterval;
     let jogoAtivo = false;
     let meu_numero_de_jogador;
+
+    let somCartaVirar;
+    
+    function inicializarSom() {
+        // Criar elemento de áudio para o som da carta virar
+        somCartaVirar = new Audio();
+        somCartaVirar.preload = 'auto';
+        somCartaVirar.volume = 0.5; // Volume moderado
+        
+        // Usar um som de "flip" ou "click" - você pode substituir por qualquer arquivo de som
+        // Por enquanto, vou usar um som sintético gerado via Web Audio API
+        criarSomSintetico();
+    }
+    
+    function criarSomSintetico() {
+        // Criar um som sintético simples usando Web Audio API
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            // Função para tocar som sintético
+            window.tocarSomCarta = function() {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // Som de "flip" - frequência que sobe rapidamente
+                oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.1);
+                
+                // Volume que diminui
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                
+                oscillator.type = 'sine';
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.2);
+            };
+        } catch (error) {
+            console.log('Web Audio API não suportada, som desabilitado');
+            window.tocarSomCarta = function() {}; // Função vazia se não suportar áudio
+        }
+    }
+    
+    function tocarSomCartaVirar() {
+        try {
+            if (window.tocarSomCarta) {
+                window.tocarSomCarta();
+            }
+        } catch (error) {
+            console.log('Erro ao tocar som:', error);
+        }
+    }
 
     function inicializarStatusJogadores() {
         if (modo === 'duo') {
@@ -321,28 +376,52 @@ document.addEventListener('DOMContentLoaded', () => {
     atualizarPlacar();
 
     function virarCarta() {
+        // Verificações básicas de bloqueio
         if (bloqueioJogo) return;
-        if (this.classList.contains('virada')) return;
-        if (this === cartasViradas[0]) return;
+        if (transicaoEmAndamento) return;
         if (!jogoAtivo || vencedor !== null) return;
 
+        // Verificar se é a vez do jogador no multiplayer
         if (modo === 'duo' && jogadorAtual !== meu_numero_de_jogador) {
             console.log('Não é a sua vez de jogar.');
             return;
         }
+        tocarSomCartaVirar();
+        
+        // Verificar se a carta já está virada ou é a mesma carta
+        if (this.classList.contains('virada')) return;
+        if (this.classList.contains('par')) return;
+        if (cartasViradas.includes(this)) return;
 
+        // LIMITE: Máximo 2 cartas por turno
+        if (cartasViradas.length >= 2) {
+            console.log('Máximo de 2 cartas por turno.');
+            return;
+        }
+
+        // Virar a carta
         this.classList.add('virada');
         cartasViradas.push(this);
+
+        console.log(`Carta virada. Total: ${cartasViradas.length}/2`);
 
         // Sincronizar estado das cartas no multiplayer
         if (modo === 'duo') {
             mandarEstadoCartasParaPHP();
         }
 
+        // Quando atingir exatamente 2 cartas, bloquear e verificar
         if (cartasViradas.length === 2) {
             bloqueioJogo = true;
+            transicaoEmAndamento = true;
             pararTimerTurno();
-            verificarPares();
+            
+            console.log('2 cartas viradas. Iniciando verificação...');
+            
+            // Pequeno delay para garantir que a carta seja visualmente virada
+            setTimeout(() => {
+                verificarPares();
+            }, 100);
         }
     }
 
@@ -380,12 +459,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (modo === 'duo') {
                 mandarEstadoCartasParaPHP().then(() => {
                     // ERROU: troca de jogador após sincronizar
-                    trocarJogador();
+                    trocarJogador().finally(() => {
+                        transicaoEmAndamento = false; // Finaliza transição
+                        aplicarBloqueioDeTurno();
+                    });
                 });
             } else {
                 // Modo solo: troca local
                 jogadorAtual = jogadorAtual === 1 ? 2 : 1;
                 atualizarPlacar();
+                transicaoEmAndamento = false; // Finaliza transição
                 aplicarBloqueioDeTurno();
             }
         }, 1000);
@@ -407,6 +490,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // ACERTOU: continua o mesmo jogador
             if (!vencedor && jogoAtivo) {
+                transicaoEmAndamento = false; // Finaliza transição
                 aplicarBloqueioDeTurno();
                 if (modo === 'duo') {
                     mandarEstadoCartasParaPHP();
@@ -779,8 +863,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
 
-                    // Sincronizar estado das cartas
-                    if (cartas && cartas.length > 0) { 
+                    // Sincronizar estado das cartas - APENAS se não há transição em andamento
+                    if (cartas && cartas.length > 0 && !transicaoEmAndamento) { 
                         const cartasRemotas = estadoRemoto.estado_cartas_json;
                         if (cartasRemotas) {
                             cartasRemotas.forEach(cartaRemota => {
@@ -862,7 +946,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    inicializarSom();
     inicializarStatusJogadores();
     inicializarJogo();
 });
-
