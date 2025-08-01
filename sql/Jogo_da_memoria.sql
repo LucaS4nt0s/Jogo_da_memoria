@@ -29,3 +29,10 @@ create table ranking(
     tempo_medio int default 0,
     foreign key (usuario_id) references usuarios(id) on delete cascade
 );
+
+
+ALTER TABLE partidas
+ADD COLUMN estado_cartas_json JSON;
+
+ALTER TABLE partidas 
+add column vez_jogador_id int default null;

@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {  
+document.addEventListener('DOMContentLoaded', () => {  
     const tabuleiro = document.querySelector('.tabuleiro');
 
     let cartasViradas = [];
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const vezJogador = document.querySelector('.vez p');
     const botaoIniciar = document.querySelector('.Botao-Iniciar');
     const cronometroDisplay = document.querySelector('#cronometro');
-    const statusJogador1Element = document.querySelector('#status-jogador1');   
+    const statusJogador1Element = document.querySelector('#status-jogador1');   
     const statusJogador2Element = document.querySelector('#status-jogador2');
     const jogador1EVoceElement = document.querySelector('#player1-e-voce');
     const jogador2EVoceElement = document.querySelector('#player2-e-voce');
@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let pollingInterval;
     let checkPlayerStatusInterval;
     let jogoAtivo = false;
+    let meu_numero_de_jogador;
 
     function inicializarStatusJogadores() {
         if (modo === 'duo') {
@@ -36,13 +37,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 statusJogador1Element.textContent = 'Online';
                 statusJogador1Element.classList.remove('status-offline');
                 statusJogador1Element.classList.add('status-online');
-                if(id_jogador1 === usuario_sessao_id) {
+                if (id_jogador1 === usuario_sessao_id) {
                     jogador1EVoceElement.style.display = 'inline';
+                } else {
+                    jogador1EVoceElement.style.display = 'none';
                 }
             } else {
                 statusJogador1Element.textContent = 'Aguardando...';
                 statusJogador1Element.classList.remove('status-online');
                 statusJogador1Element.classList.add('status-offline');
+                jogador1EVoceElement.style.display = 'none';
             }
 
             if (id_jogador2) {
@@ -51,11 +55,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 statusJogador2Element.classList.add('status-online');
                 if (id_jogador2 === usuario_sessao_id) {
                     jogador2EVoceElement.style.display = 'inline';
+                } else {
+                    jogador2EVoceElement.style.display = 'none';
                 }
             } else {
                 statusJogador2Element.textContent = 'Aguardando...';
                 statusJogador2Element.classList.remove('status-online');
                 statusJogador2Element.classList.add('status-offline');
+                jogador2EVoceElement.style.display = 'none';
             }
 
             if (!id_jogador2) {
@@ -142,7 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             botaoIniciar.style.display = 'block'; 
                         }
                     }
-
                 } catch (error) {
                     console.error('Erro na verificação de status da partida:', error);
                 }
@@ -157,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function atualizarCronometro() {
-        if(cronometroDisplay) {
+        if (cronometroDisplay) {
             cronometroDisplay.textContent = formatarTempo(tempo);
         }
     }
@@ -169,22 +175,19 @@ document.addEventListener('DOMContentLoaded', () => {
             intervaloCronometro = setInterval(() => {
                 tempo++;
                 atualizarCronometro();
-                // console.log("Cronômetro: ", tempo); // Para depuração
             }, 1000);
             console.log("Cronômetro iniciado.");
-        } else {
-            // console.log("Tentativa de iniciar cronômetro bloqueada (já rodando ou jogo inativo/terminado).");
         }
     }
 
     function pararCronometro() {
-        if(intervaloCronometro) {
+        if (intervaloCronometro) {
             clearInterval(intervaloCronometro);
             intervaloCronometro = null;
         }
     }
 
-    function atualizarPlacar(){
+    function atualizarPlacar() {
         if (placarJogador1) {
             placarJogador1.textContent = `Jogador 1: ${pontosJogador1}`;
         }
@@ -192,27 +195,29 @@ document.addEventListener('DOMContentLoaded', () => {
             placarJogador2.textContent = `Jogador 2: ${pontosJogador2}`;
         }
         if (vezJogador) {
-            vezJogador.textContent = `Vez do jogador ${jogadorAtual}`;
+            let nomeJogador = '';
+            if (jogadorAtual === 1) {
+                nomeJogador = 'Jogador 1';
+            } else if (jogadorAtual === 2) {
+                nomeJogador = 'Jogador 2';
+            }
+            vezJogador.textContent = `Vez do ${nomeJogador}`;
         }
-    }  
+    }
 
     function iniciarTimerTurno() {
-        if (modo === 'solo'){
+        if (modo === 'solo') {
             pararTimerTurno();
             return;
         }
-
-        let meu_numero_de_jogador;
-        if (usuario_sessao_id == id_jogador1) {
-            meu_numero_de_jogador = 1;
-        } else if (usuario_sessao_id == id_jogador2) {
-            meu_numero_de_jogador = 2;
-        } else {
-            return; 
+        
+        if (!meu_numero_de_jogador) {
+            console.warn('Número do jogador local não definido.');
+            return;
         }
 
         if (jogadorAtual !== meu_numero_de_jogador) {
-            pararTimerTurno(); 
+            pararTimerTurno();
             return;
         }
 
@@ -221,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         tempoRestanteJogada = TEMPO_LIMITE_JOGADA;
-        atualizarTimerTurnoDisplay(); 
+        atualizarTimerTurnoDisplay();
 
         intervaloTempoJogada = setInterval(() => {
             tempoRestanteJogada--;
@@ -234,26 +239,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 trocarJogador(); 
                 resetarTabuleiro();
             }
-        }, 1000); 
+        }, 1000);
     }
 
-    function pararTimerTurno(){
+    function pararTimerTurno() {
         if (intervaloTempoJogada) {
-                clearInterval(intervaloTempoJogada);
-                intervaloTempoJogada = null;
-                if (timerTurnoDisplay) {
-                    timerTurnoDisplay.textContent = ''; 
-                }
+            clearInterval(intervaloTempoJogada);
+            intervaloTempoJogada = null;
+            if (timerTurnoDisplay) {
+                timerTurnoDisplay.textContent = '';
             }
+        }
     }
 
-    function atualizarTimerTurnoDisplay(){
-        if(timerTurnoDisplay){
+    function atualizarTimerTurnoDisplay() {
+        if (timerTurnoDisplay) {
             timerTurnoDisplay.textContent = `Tempo restante: ${tempoRestanteJogada} segundos`;
         }
     }
 
-    function criarCartaElemento(dadosCarta){
+    function criarCartaElemento(dadosCarta) {
         const carta = document.createElement('div');
         carta.classList.add('cartas');
         carta.dataset.idUnico = dadosCarta.id_unico;
@@ -283,26 +288,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     atualizarPlacar();
 
-    function virarCarta(){
+    function virarCarta() {
         if (bloqueioJogo) return;
         if (this.classList.contains('virada')) return;
         if (this === cartasViradas[0]) return;
-
         if (!jogoAtivo || vencedor !== null) return;
 
-        let meu_numero_de_jogador;
-        if (usuario_sessao_id == id_jogador1) {
-            meu_numero_de_jogador = 1;
-        } else if (usuario_sessao_id == id_jogador2) {
-            meu_numero_de_jogador = 2;
-        }else {
-            console.warn('Usuário da sessão não é jogador 1 nem jogador 2 desta partida.');
-            return; 
-        }
-
         if (modo === 'duo' && jogadorAtual !== meu_numero_de_jogador) {
-             console.log('Não é a sua vez de jogar.');
-             return; 
+            console.log('Não é a sua vez de jogar.');
+            return;
         }
 
         this.classList.add('virada');
@@ -318,22 +312,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function verificarPares() {
         const [carta1, carta2] = cartasViradas;
-
         const ePar = carta1.dataset.nome === carta2.dataset.nome;
 
         if (ePar) {
-
             desabilitarCartas(carta1, carta2);
-
             if (jogadorAtual === 1) {
                 pontosJogador1++;
-            }
-            else {
+            } else {
                 pontosJogador2++;
             }
             atualizarPlacar();
             mandarPontuacaoParaPHP(jogadorAtual, jogadorAtual === 1 ? pontosJogador1 : pontosJogador2);
-        }else{
+        } else {
             virarCartasDeVolta(carta1, carta2);
         }
     }
@@ -345,30 +335,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
             mandarEstadoCartasParaPHP().then(() => {
                 resetarTabuleiro();
-                trocarJogador(); 
+                trocarJogador();
             });
         }, 1000);
     }
 
     function desabilitarCartas(carta1, carta2) {
-      carta1.removeEventListener('click', virarCarta);
-      carta2.removeEventListener('click', virarCarta);
+        carta1.removeEventListener('click', virarCarta);
+        carta2.removeEventListener('click', virarCarta);
 
-
-      carta1.classList.add('par');
-      carta2.classList.add('par');
-        
-      setTimeout(() => {
-          mandarEstadoCartasParaPHP().then(() => {
-              resetarTabuleiro();
-              if (jogoAtivo) {
-                  verificarFimDeJogo(); 
-              }
-              if (!vencedor && jogoAtivo) {
-                  iniciarTimerTurno();
-              }
-          });
-      }, 100);
+        carta1.classList.add('par');
+        carta2.classList.add('par');
+            
+        setTimeout(() => {
+            mandarEstadoCartasParaPHP().then(() => {
+                resetarTabuleiro();
+                if (jogoAtivo) {
+                    verificarFimDeJogo();
+                }
+                if (!vencedor && jogoAtivo) {
+                    iniciarTimerTurno();
+                }
+            });
+        }, 100);
     }
 
     function resetarTabuleiro() {
@@ -376,12 +365,23 @@ document.addEventListener('DOMContentLoaded', () => {
         bloqueioJogo = false;
     }
 
-     async function trocarJogador() {
-        if (modo === 'solo') return; 
+    async function trocarJogador() {
+        if (modo === 'solo' || !id_partida || !jogoAtivo) return;
 
-        const proximoJogador = jogadorAtual === 1 ? 2 : 1;
+        let proximoJogador;
+        if (jogadorAtual === 1) {
+            proximoJogador = id_jogador2;
+        } else if (jogadorAtual === 2) {
+            proximoJogador = id_jogador1;
+        }
+
+        if (proximoJogador === null || proximoJogador === undefined) {
+            console.error('ID do próximo jogador não definido. Não é possível trocar de jogador.');
+            return;
+        }
 
         try {
+            console.log(`Solicitando troca de jogador para o servidor. Próximo jogador: ${proximoJogador}`);
             const response = await fetch('./php/trocar_jogador_db.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -414,6 +414,19 @@ document.addEventListener('DOMContentLoaded', () => {
             pararTimerTurno();
             return;
         }
+        
+        if (!meu_numero_de_jogador) {
+            if (usuario_sessao_id == id_jogador1) {
+                meu_numero_de_jogador = 1;
+            } else if (usuario_sessao_id == id_jogador2) {
+                meu_numero_de_jogador = 2;
+            } else {
+                console.warn('Usuário da sessão não é jogador 1 nem jogador 2 desta partida.');
+                tabuleiro.classList.add('oponente-jogando');
+                pararTimerTurno();
+                return;
+            }
+        }
 
         if (vencedor !== null || !jogoAtivo) {
             tabuleiro.classList.add('oponente-jogando');
@@ -427,18 +440,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        let meu_numero_de_jogador;
-        if (usuario_sessao_id == id_jogador1) {
-            meu_numero_de_jogador = 1;
-        } else if (usuario_sessao_id == id_jogador2) {
-            meu_numero_de_jogador = 2;
-        } else {
-            console.warn('Usuário da sessão não é jogador 1 nem jogador 2 desta partida.');
-            tabuleiro.classList.add('oponente-jogando');
-            pararTimerTurno();
-            return;
-        }
-
         if (jogadorAtual === meu_numero_de_jogador) {
             tabuleiro.classList.remove('oponente-jogando');
             iniciarTimerTurno();
@@ -447,7 +448,6 @@ document.addEventListener('DOMContentLoaded', () => {
             pararTimerTurno();
         }
     }
-
 
     function verificarFimDeJogo() {
         const cartasCombinadas = document.querySelectorAll('.par').length;
@@ -479,7 +479,6 @@ document.addEventListener('DOMContentLoaded', () => {
             tabuleiro.classList.add('pausado'); 
             tabuleiro.classList.add('oponente-jogando'); 
 
-
             botaoIniciar.disabled = true;
             mandarDadosDeFimDeJogoParaPHP(tempo, vencedor)
             .catch(error => {
@@ -488,8 +487,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function mandarPontuacaoParaPHP(numeroDoJogador, pontos){
-        if(!id_partida) {
+    function mandarPontuacaoParaPHP(numeroDoJogador, pontos) {
+        if (!id_partida) {
             console.error('ID da partida não definido.');
             return;
         }
@@ -550,7 +549,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) {
                 let errorData;
                 try {
-                    errorData = await response.json(); 
+                    errorData = await response.json();
                 } catch (jsonError) {
                     throw new Error(`Erro HTTP: ${response.status} ${response.statusText}. Resposta não é JSON.`);
                 }
@@ -604,8 +603,16 @@ document.addEventListener('DOMContentLoaded', () => {
         atualizarCronometro();
         tabuleiro.classList.add('pausado');
 
+        if (usuario_sessao_id == id_jogador1) { 
+            meu_numero_de_jogador = 1;
+        } else if (usuario_sessao_id == id_jogador2) { 
+            meu_numero_de_jogador = 2;
+        } else {
+            meu_numero_de_jogador = 0;
+        }
+
         if (modo === 'duo') {
-            if (usuario_sessao_id == id_jogador1) { 
+            if (meu_numero_de_jogador === 1) {
                 if (!id_jogador2) {
                     botaoIniciar.disabled = true;
                     botaoIniciar.textContent = 'Aguardando Jogador 2...';
@@ -614,12 +621,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     botaoIniciar.textContent = 'Iniciar Jogo';
                     iniciarPollingEstadoJogo();
                 }
-            } else if (usuario_sessao_id == id_jogador2) { 
+            } else { 
                 botaoIniciar.style.display = 'none'; 
                 iniciarPollingEstadoJogo();
-            } else { 
-                 botaoIniciar.style.display = 'none';
-                 iniciarPollingEstadoJogo();
             }
         } else { 
             botaoIniciar.disabled = false;
@@ -678,7 +682,6 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 console.error('Falha ao salvar estado das cartas:', data.mensagem);
             }
-
         } catch (error) {
             console.error('Erro ao enviar estado das cartas para o servidor:', error);
         }
@@ -711,10 +714,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (data.sucesso && data.estado_jogo) {
                     const estadoRemoto = data.estado_jogo;
                     
-                    if (estadoRemoto.vencedor_id !== null || (estadoRemoto.vencedor_id === null && estadoRemoto.pontos_jogador1 === estadoRemoto.pontos_jogador2 && estadoRemoto.tempo > 0 && estadoRemoto.estado_cartas_json && estadoRemoto.estado_cartas_json.every(c => c.em_par))) {
-                        if (vencedor === null) { 
+                    const todasCartasCombinadas = estadoRemoto.estado_cartas_json && estadoRemoto.estado_cartas_json.every(c => c.em_par);
+
+                    if (estadoRemoto.vencedor_id !== null || (todasCartasCombinadas && estadoRemoto.tempo > 0)) {
+                        if (vencedor === null) {
                             vencedor = estadoRemoto.vencedor_id;
-                            jogoAtivo = false; 
+                            jogoAtivo = false;
 
                             pararCronometro();
                             pararPollingEstadoJogo(); 
@@ -733,19 +738,18 @@ document.addEventListener('DOMContentLoaded', () => {
                             }
                             alert(mensagemFimJogo);
                         }
-                        return; 
+                        return;
                     }
                     
-                    
-                    if (vencedor !== null || !jogoAtivo && tabuleiro.classList.contains('oponente-jogando')) {
+                    if (vencedor !== null || (!jogoAtivo && tabuleiro.classList.contains('oponente-jogando'))) {
                         tabuleiro.classList.add('pausado');
                         tabuleiro.classList.add('oponente-jogando');
                         pararCronometro();
                         pararTimerTurno();
-                        return; 
+                        return;
                     }
 
-                    const jogoComecouNoServidor = (estadoRemoto.vez_jogador_id !== null && estadoRemoto.vez_jogador_id !== 0); 
+                    const jogoComecouNoServidor = (estadoRemoto.vez_jogador_id !== null && estadoRemoto.vez_jogador_id !== '0');
                     if (jogoComecouNoServidor && !jogoAtivo) {
                         jogoAtivo = true;
                         tabuleiro.classList.remove('pausado'); 
@@ -773,17 +777,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (jogoAtivo) {
                         const jogadorAtualRemoto = estadoRemoto.vez_jogador_id;
                         let numJogadorAtualRemoto = 0; 
-                        if (jogadorAtualRemoto === id_jogador1) {
+                        if (jogadorAtualRemoto == id_jogador1) {
                             numJogadorAtualRemoto = 1;
-                        } else if (jogadorAtualRemoto === id_jogador2) {
+                        } else if (jogadorAtualRemoto == id_jogador2) {
                             numJogadorAtualRemoto = 2;
                         }
-
+                        
                         if (jogadorAtual !== numJogadorAtualRemoto) {
+                             console.log(`Vez do jogador mudou no servidor. Agora é a vez do jogador ${numJogadorAtualRemoto}`);
                             jogadorAtual = numJogadorAtualRemoto;
                             atualizarPlacar();
                             aplicarBloqueioDeTurno();
-                        } else if (!tabuleiro.classList.contains('oponente-jogando') || tabuleiro.classList.contains('pausado')) {
+                        } else if (!tabuleiro.classList.contains('oponente-jogando') && meu_numero_de_jogador !== jogadorAtual) {
                             aplicarBloqueioDeTurno();
                         }
                     }
@@ -805,7 +810,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                         cartaLocal.removeEventListener('click', virarCarta);
                                     } else if (!cartaRemota.em_par && cartaLocal.classList.contains('par')) {
                                         cartaLocal.classList.remove('par');
-                                        if(!cartaLocal.classList.contains('virada') && !cartaLocal.classList.contains('par')) { 
+                                        if (!cartaLocal.classList.contains('virada') && !cartaLocal.classList.contains('par')) { 
                                             cartaLocal.addEventListener('click', virarCarta);
                                         }
                                     }
@@ -820,71 +825,64 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                 } else {
-                    console.error('Falha na sincronização do estado do jogo:', data.mensagem);
+                    console.error('Falha ao obter estado do jogo no polling:', data.mensagem);
                 }
             } catch (error) {
                 console.error('Erro no polling do estado do jogo:', error);
             }
         }, 1500);
     }
-
+    
     function pararPollingEstadoJogo() {
-        if (pollingInterval) {
+         if (pollingInterval) {
             clearInterval(pollingInterval);
             pollingInterval = null;
-            console.log('Polling do estado do jogo parado.');
         }
     }
 
-    botaoIniciar.addEventListener('click', async () => {
-        if (botaoIniciar.textContent === 'Iniciar Jogo' && !jogoAtivo) {
-            if (modo === 'duo' && usuario_sessao_id == id_jogador1) {
-                try {
-                    const response = await fetch('./php/iniciar_jogo_db.php', {
+    if (botaoIniciar) {
+        botaoIniciar.addEventListener('click', () => {
+            if (modo === 'solo') {
+                if (!jogoAtivo) {
+                    jogoAtivo = true;
+                    iniciarCronometro();
+                    tabuleiro.classList.remove('pausado');
+                    botaoIniciar.textContent = 'Reiniciar Jogo';
+                    aplicarBloqueioDeTurno(); 
+                } else {
+                    inicializarJogo();
+                    botaoIniciar.textContent = 'Iniciar Jogo'; 
+                }
+            } else if (modo === 'duo') {
+                if (usuario_sessao_id == id_jogador1 && id_jogador2) { 
+                     console.log('Iniciando jogo multiplayer...');
+                    fetch('./php/iniciar_jogo_db.php', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ id_partida: id_partida })
-                    });
-                    const data = await response.json();
-                    if (data.sucesso) {
-                        console.log('Server reported game started successfully.');
-                        jogoAtivo = true;
-                        botaoIniciar.disabled = true;
-                        botaoIniciar.textContent = 'Em Jogo...';
-                        tabuleiro.classList.remove('pausado');
-                        iniciarCronometro();
-                        aplicarBloqueioDeTurno();
-                        if (checkPlayerStatusInterval) {
-                            clearInterval(checkPlayerStatusInterval);
-                            console.log('Jogo iniciado. Polling de status de jogador parado.');
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.sucesso) {
+                            console.log(data.mensagem);
+                            botaoIniciar.style.display = 'none';
+                            jogoAtivo = true;
+                            iniciarCronometro();
+                            tabuleiro.classList.remove('pausado');
+                            aplicarBloqueioDeTurno();
+                        } else {
+                            alert('Falha ao iniciar o jogo: ' + data.mensagem);
                         }
-                        iniciarPollingEstadoJogo();
-
-                    } else {
-                        console.error('Failed to signal game start to server:', data.mensagem);
-                        alert('Erro ao iniciar o jogo: ' + data.mensagem);
-                    }
-                } catch (error) {
-                    console.error('Error starting game via server:', error);
-                    alert('Erro de conexão ao iniciar o jogo.');
+                    })
+                    .catch(error => {
+                        console.error('Erro ao iniciar jogo:', error);
+                        alert('Erro ao iniciar o jogo. Verifique a conexão.');
+                    });
                 }
-            } else if (modo === 'solo') {
-                jogoAtivo = true;
-                tabuleiro.classList.remove('pausado');
-                botaoIniciar.disabled = true;
-                botaoIniciar.textContent = 'Em Jogo...';
-                iniciarCronometro(); 
-                iniciarTimerTurno(); 
-                aplicarBloqueioDeTurno(); 
-                console.log('Jogo solo iniciado.');
             }
-        }
-    });
-
-    inicializarJogo();
-    inicializarStatusJogadores();
-
-    if (modo === 'duo' && id_jogador2) {
-        iniciarPollingEstadoJogo();
+        });
     }
+
+    inicializarStatusJogadores();
+    inicializarJogo();
 });
