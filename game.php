@@ -92,8 +92,8 @@
             const cartasIniciais = <?php echo $estado_cartas_json_para_js; ?>;
             const id_partida = <?php echo json_encode($_SESSION['id_partida'] ?? null); ?>;
             const modo = <?php echo json_encode($_SESSION['modo'] ?? ''); ?>;
-            const id_jogador1 = <?php echo json_encode($id_jogador1); ?>;
-             id_jogador2 = <?php echo json_encode($id_jogador2); ?>;
+            let id_jogador1 = <?php echo json_encode($id_jogador1); ?>;
+            let id_jogador2 = <?php echo json_encode($id_jogador2); ?>;
             const usuario_sessao_id = <?php echo json_encode($_SESSION['usuario_id'] ?? null); ?>;
             const estado_botao_inicial = <?php echo json_encode($estado_botao); ?>;
         </script>
