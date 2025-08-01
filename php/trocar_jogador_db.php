@@ -1,8 +1,8 @@
 <?php
 header('Content-Type: application/json'); 
-require_once 'conexao.php'; 
+require_once 'conexao_bd.php'; 
 
-$response = ['successo' => false, 'mensagem' => ''];
+$response = ['sucesso' => false, 'mensagem' => ''];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = file_get_contents('php://input');
@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$proximo_jogador_id, $id_partida]);
 
             if ($stmt->rowCount() > 0) {
-                $response['successo'] = true;
+                $response['sucesso'] = true;
                 $response['mensagem'] = 'Vez do jogador atualizada com sucesso.';
             } else {
                 $response['mensagem'] = 'Nenhuma partida encontrada com o ID fornecido ou nenhum dado foi alterado.';
