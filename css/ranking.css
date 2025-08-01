@@ -1,5 +1,16 @@
         :root {
             --preto-profundo: #000000;
+            --amarelo-vibrante: #FFE81F;
+            --dark-slate-gray: #4D5656;
+            --azul-celeste: #87CEEB;
+            --vermelho-sangue: #FF0000;
+            --cinza-metalico: #A9A9A9;
+            --branco-puro: #FFFFFF;
+            --amarelo-hover: #CCAC00;
+            --fonte-star-wars: 'Star Jedi';
+            --fonte-corpo-de-texto: 'Space Mono', monospace;
+            --fonte-secundaria: 'Oswald', sans-serif;
+            --preto-profundo: #000000;
             --amarelo-vibrante: #FEE715;
             --azul-celeste: #87CEEB;
             --verde-neon: #39FF14;
@@ -9,7 +20,7 @@
         /* Estilo base do corpo da página */
         body {
             background-color: var(--preto-profundo);
-            background-image: url('https://www.transparenttextures.com/patterns/stardust.png'); /* Fundo de estrelas sutil */
+            background-image: url('https://www.transparenttextures.com/patterns/stardust.png'); 
             color: var(--branco-galactico);
             font-family: var(--fonte-corpo-de-texto);
             margin: 0;
@@ -26,7 +37,7 @@
             margin: 0 auto;
         }
 
-        /* Estilo do Header */
+       
         .header {
             background-color: rgba(10, 10, 10, 0.8);
             border-bottom: 2px solid var(--verde-neon);
@@ -78,7 +89,6 @@
         }
 
 
-        /* Estilo da Tela de Ranking */
         #ranking-screen {
             width: 100%;
             display: flex;
@@ -88,9 +98,9 @@
 
         #ranking-screen .container {
             background-color: rgba(0, 0, 0, 0.8);
-            border: 2px solid var(--verde-neon);
+            border: 2px solid var(--vermelho-sangue);
             border-radius: 20px;
-            box-shadow: 0 0 20px rgba(57, 255, 20, 0.5);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
             padding: 25px;
         }
 
@@ -99,14 +109,14 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 25px;
-            border-bottom: 1px solid var(--verde-neon);
+            border-bottom: 1px solid var(--vermelho-sangue);
             padding-bottom: 15px;
         }
 
         .screen-header h2 {
             font-family: var(--fonte-star-wars);
             font-size: 2.5em;
-            color: var(--amarelo-vibrante);
+            color: var(--vermelho-sangue);
             margin: 0;
             letter-spacing: 2px;
         }
@@ -130,7 +140,7 @@
             color: var(--preto-profundo);
         }
 
-        /* Abas do Ranking */
+       
         .ranking-tabs {
             display: flex;
             gap: 10px;
@@ -156,16 +166,16 @@
         }
 
         .tab-btn.active {
-            background-color: var(--verde-neon);
+            background-color: var(--vermelho-sangue);
             color: var(--preto-profundo);
-            border-color: var(--verde-neon);
+            border-color: var(--vermelho-sangue);
             font-weight: bold;
-            box-shadow: 0 0 10px var(--verde-neon);
+            box-shadow: 0 0 10px var(--vermelho-sangue);
         }
 
-        /* Tabela do Ranking */
+        
         .ranking-table-container {
-            overflow-x: auto; /* Para responsividade em telas pequenas */
+            overflow-x: auto; 
         }
 
         .ranking-table {
@@ -176,16 +186,16 @@
 
         .ranking-table th, .ranking-table td {
             padding: 15px;
-            border-bottom: 1px solid rgba(57, 255, 20, 0.3);
+            border-bottom: 1px solid rgba(199, 29, 29, 0.3);
         }
 
         .ranking-table thead {
-            background-color: rgba(57, 255, 20, 0.2);
+            background-color: rgba(170, 44, 44, 0.2);
         }
 
         .ranking-table th {
             font-family: 'Orbitron', sans-serif;
-            color: var(--verde-neon);
+            color: var(--vermelho-sangue);
             font-size: 1.1em;
         }
 
@@ -197,8 +207,7 @@
             font-size: 1em;
             color: var(--branco-galactico);
         }
-
-        /* Estilo para a primeira coluna (Posição) */
+       
         .ranking-table td:first-child {
             font-weight: bold;
             color: var(--amarelo-vibrante);

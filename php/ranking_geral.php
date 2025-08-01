@@ -1,21 +1,30 @@
 <?php
 
 session_start();
-require_once 'conexao_bd.php';
+require_once 'conexao_bd.php'; 
 
 header('Content-Type: application/json');
 
 try {
 
+    // Consulta SQL aprimorada para ser autossuficiente
     $stmt = $pdo->prepare("
         SELECT
             u.nome AS jogador,
-            COALESCE(r.total_partidas, 0) AS total_partidas,
-            COALESCE(r.partidas_vencidas, 0) AS partidas_vencidas,
+            (
+                SELECT COUNT(p.id)
+                FROM partidas p
+                WHERE p.usuario_id = u.id OR p.jogador2_id = u.id
+            ) AS total_partidas,
+            (
+                SELECT COUNT(p.id)
+                FROM partidas p
+                WHERE p.vencedor_id = u.id
+            ) AS partidas_vencidas,
             (
                 SELECT MIN(p.tempo)
                 FROM partidas p
-                WHERE p.vencedor_id = u.id AND p.tempo > 0 -- Adicionado p.tempo > 0 para ignorar tempos não definidos/zero
+                WHERE p.vencedor_id = u.id AND p.tempo > 0
             ) AS melhor_tempo_segundos,
             (
                 SELECT SUM(CASE
@@ -27,7 +36,6 @@ try {
                 WHERE p.usuario_id = u.id OR p.jogador2_id = u.id
             ) AS pontos_totais
         FROM usuarios u
-        LEFT JOIN ranking r ON u.id = r.usuario_id
         ORDER BY pontos_totais DESC, partidas_vencidas DESC, total_partidas DESC
         LIMIT 10
     ");
@@ -37,8 +45,8 @@ try {
     $data = [];
     $position = 1;
     foreach ($results as $row) {
-       
-        $melhorTempoFormatado = $row['melhor_tempo_segundos'] ? gmdate("i:s", $row['melhor_tempo_segundos']) : 'N/A';
+        
+        $melhorTempoFormatado = ($row['melhor_tempo_segundos'] !== null) ? gmdate("i:s", $row['melhor_tempo_segundos']) : 'N/A';
         $data[] = [
             $position++,
             htmlspecialchars($row['jogador']), 
@@ -52,8 +60,9 @@ try {
     echo json_encode(['success' => true, 'headers' => ['Posição', 'Jogador', 'Pontos Totais', 'Partidas', 'Vitórias', 'Melhor Tempo'], 'rows' => $data]);
 
 } catch (PDOException $e) {
-   
+    
     error_log('Erro ao buscar ranking geral: ' . $e->getMessage()); 
     echo json_encode(['success' => false, 'message' => 'Erro ao buscar ranking geral. Por favor, tente novamente mais tarde.']);
 }
+
 ?>

@@ -1,0 +1,187 @@
+ :root {
+            --preto-profundo: #000000;
+            --amarelo-vibrante: #FEE715;
+            --azul-celeste: #87CEEB;
+            --verde-neon: #39FF14;
+            --branco-galactico: #EAEAEA;
+            --fonte-star-wars: 'Star Jedi';
+            --fonte-corpo-de-texto: 'Space Mono', monospace;
+            --fonte-secundaria: 'Oswald', sans-serif;
+        }
+
+        body {
+            background-color: var(--preto-profundo);
+            background-image: url('https://www.transparenttextures.com/patterns/stardust.png'); 
+            color: var(--branco-galactico);
+            font-family: var(--fonte-corpo-de-texto);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+
+        #ranking-screen {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 20px 0;
+        }
+
+        #ranking-screen .container {
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--verde-neon);
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(245, 0, 0, 0.5);
+            padding: 25px;
+        }
+
+        .screen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--verde-neon);
+            padding-bottom: 15px;
+        }
+
+        .screen-header h2 {
+            font-family: var(--fonte-star-wars);
+            font-size: 2.5em;
+            color: var(--amarelo-vibrante);
+            margin: 0;
+            letter-spacing: 2px;
+        }
+
+        .btn {
+            cursor: pointer;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--branco-galactico);
+            color: var(--branco-galactico);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--branco-galactico);
+            color: var(--preto-profundo);
+        }
+
+#historico-screen {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+    flex-grow: 1; 
+}
+
+#historico-screen .container {
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 2px solid var(--azul-celeste); 
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(135, 206, 235, 0.5); 
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+}
+
+.screen-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--azul-celeste); 
+    padding-bottom: 15px;
+}
+
+.screen-header h2 {
+    font-family: var(--fonte-star-wars);
+    font-size: 2.5em;
+    color: var(--azul-celeste);
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+
+.historico-table-container {
+    overflow-x: auto;
+}
+
+.historico-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    min-width: 600px;
+}
+
+.historico-table th, .historico-table td {
+    padding: 15px;
+    border-bottom: 1px solid rgba(135, 206, 235, 0.3);
+    word-wrap: break-word;
+}
+
+.historico-table thead {
+    background-color: rgba(135, 206, 235, 0.2); 
+}
+
+.historico-table th {
+    font-family: var(--fonte-tabelas-destaque);
+    color: var(--azul-celeste); 
+    font-size: 1.1em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.historico-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.historico-table td {
+    font-size: 1em;
+    color: var(--branco-galactico);
+}
+
+
+.historico-table td:first-child {
+    font-weight: bold;
+    color: var(--amarelo-vibrante);
+    font-size: 1.2em;
+}
+
+
+@media (max-width: 768px) {
+    .screen-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    .screen-header h2 {
+        font-size: 2em;
+    }
+    .historico-table th, .historico-table td {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+    .historico-table td:first-child {
+        font-size: 1.1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .screen-header h2 {
+        font-size: 1.8em;
+    }
+}

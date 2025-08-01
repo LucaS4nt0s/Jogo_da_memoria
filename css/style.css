@@ -48,8 +48,8 @@ h1{
     font-size: 4rem;
     font-weight: bold;
     color: transparent;
-    -webkit-text-stroke-width: 1px; /* Largura do contorno (ajuste conforme necessário) */
-    -webkit-text-stroke-color: #FFE81F; /* Cor do contorno (amarelo Star Wars) */
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: #FFE81F; 
     text-stroke-width: 1px;
     text-stroke-color: #FFE81F;
     margin-bottom: 30px;
@@ -58,10 +58,10 @@ h1{
 h2{
     font-family: var(--fonte-star-wars);
     color: var(--azul-eletrico);
-    font-size: 3.0em; /* Ajuste o tamanho conforme necessário */
-    color: var(--azul-celeste); /* Azul Elétrico / Cor da Força */
+    font-size: 3.0em;
+    color: var(--azul-celeste); 
     text-shadow: 0 0 5px var(--azul-celeste);
-    letter-spacing: 2px; /* Espaçamento entre letras para melhor visualização */
+    letter-spacing: 2px; 
 }
 
 
@@ -162,9 +162,9 @@ input:focus {
 }
 
 .cadastro-h2{
-    color: var(--vermelho-sangue); /* Azul Elétrico / Cor da Força */
+    color: var(--vermelho-sangue); 
     text-shadow: 0 0 5px var(--vermelho-sangue);
-    letter-spacing: 2px; /* Espaçamento entre letras para melhor visualização */
+    letter-spacing: 2px; 
 }
 
 .form-cadastro{

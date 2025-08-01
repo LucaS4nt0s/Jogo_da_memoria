@@ -3,6 +3,8 @@ require_once './php/auth.php';
 require_once './php/conexao_bd.php';
 
 $erro = ''; 
+$nome = ''; 
+$email = ''; 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = $_POST['nome'] ?? '';
