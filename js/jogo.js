@@ -84,12 +84,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     const data = await response.json();
-
                     if (data.jogador1_id) {
+                        id_jogador1 = data.jogador1_id; 
+                    }
+                    id_jogador2 = data.jogador2_id;
+
+                    if (id_jogador1) { 
                         statusJogador1Element.textContent = 'Online';
                         statusJogador1Element.classList.remove('status-offline');
                         statusJogador1Element.classList.add('status-online');
-                        if (data.jogador1_id === usuario_sessao_id) {
+                        if (id_jogador1 === usuario_sessao_id) { 
                             jogador1EVoceElement.style.display = 'inline';
                         } else {
                             jogador1EVoceElement.style.display = 'none';
@@ -101,38 +105,41 @@ document.addEventListener('DOMContentLoaded', () => {
                         jogador1EVoceElement.style.display = 'none';
                     }
 
-                    if (data.jogador2_id) {
+                    if (id_jogador2 !== null) {
                         statusJogador2Element.textContent = 'Online';
                         statusJogador2Element.classList.remove('status-offline');
                         statusJogador2Element.classList.add('status-online');
-                        if (data.jogador2_id === usuario_sessao_id) {
+                        if (id_jogador2 === usuario_sessao_id) {
                             jogador2EVoceElement.style.display = 'inline';
                         } else {
                             jogador2EVoceElement.style.display = 'none';
                         }
 
-                        if (usuario_sessao_id == id_jogador1 && botaoIniciar.hasAttribute('disabled')) {    
+                        if (usuario_sessao_id === id_jogador1) { 
+                            botaoIniciar.style.display = 'block'; 
                             botaoIniciar.removeAttribute('disabled');
                             botaoIniciar.textContent = 'Iniciar Jogo';
-                            console.log('Jogador 2 conectado! Botão iniciar habilitado.');
-                        } else if (usuario_sessao_id == id_jogador2) {
+                            console.log('Botão "Iniciar Jogo" habilitado para Jogador 1.');
+                        } else if (usuario_sessao_id === id_jogador2) { 
+                            botaoIniciar.style.display = 'none'; 
+                        } else { 
                             botaoIniciar.style.display = 'none';
                         }
-                        
-                        id_jogador2 = data.jogador2_id;
+
                         clearInterval(checkPlayerStatusInterval);
                         console.log('Jogador 2 detectado. Parando verificação de jogador.');
 
                         iniciarPollingEstadoJogo();
-                    } else {
+                    } else { 
                         statusJogador2Element.textContent = 'Aguardando...';
                         statusJogador2Element.classList.remove('status-online');
                         statusJogador2Element.classList.add('status-offline');
                         jogador2EVoceElement.style.display = 'none';
 
-                        if (usuario_sessao_id == id_jogador1) {
+                        if (usuario_sessao_id === id_jogador1) {
                             botaoIniciar.disabled = true;
                             botaoIniciar.textContent = 'Aguardando Jogador 2...';
+                            botaoIniciar.style.display = 'block'; 
                         }
                     }
 
@@ -156,11 +163,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function iniciarCronometro() {
-        if(!intervaloCronometro) {
+        if (intervaloCronometro) clearInterval(intervaloCronometro);
+
+        if (!intervaloCronometro && jogoAtivo && vencedor === null) {
             intervaloCronometro = setInterval(() => {
                 tempo++;
                 atualizarCronometro();
+                // console.log("Cronômetro: ", tempo); // Para depuração
             }, 1000);
+            console.log("Cronômetro iniciado.");
+        } else {
+            // console.log("Tentativa de iniciar cronômetro bloqueada (já rodando ou jogo inativo/terminado).");
         }
     }
 
@@ -708,7 +721,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             
                             tabuleiro.classList.add('pausado'); 
                             tabuleiro.classList.add('oponente-jogando'); 
-                            botaoIniciar.style.display = 'none';
 
                             let mensagemFimJogo = 'Fim de Jogo!';
                             if (vencedor === null) {
@@ -727,7 +739,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (vencedor !== null || !jogoAtivo && tabuleiro.classList.contains('oponente-jogando')) {
                         tabuleiro.classList.add('pausado');
                         tabuleiro.classList.add('oponente-jogando');
-                        botaoIniciar.style.display = 'none';
                         pararCronometro();
                         pararTimerTurno();
                         return; 
@@ -739,7 +750,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         tabuleiro.classList.remove('pausado'); 
                         console.log('Jogo iniciado no servidor. Ativando jogo localmente.');
                         iniciarCronometro();
-                        if (usuario_sessao_id == id_jogador1 || usuario_sessao_id == id_jogador2) {
+                        if (usuario_sessao_id == id_jogador2) {
                             botaoIniciar.style.display = 'none';
                         }
                     }
