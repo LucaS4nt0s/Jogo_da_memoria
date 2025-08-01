@@ -77,10 +77,9 @@ if(isset($_POST['entrar_partida'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/header.css">
     <link rel="stylesheet" href="./css/ranking.css">
-    <title>Jogo da Memória - Hall da Fama</title>
+    
 </head>
 <body>
-
     <?php include_once './php/header.php'; ?>
 
     <main id="ranking-screen" class="screen">
@@ -105,7 +104,7 @@ if(isset($_POST['entrar_partida'])) {
                 </div>
             </div>
         </div>
-    </main>
+</main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {

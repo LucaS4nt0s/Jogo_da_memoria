@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-require_once 'conexao_bd.php';
+require_once 'conexao_bd.php'; 
 
 header('Content-Type: application/json');
 

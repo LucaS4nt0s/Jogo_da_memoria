@@ -3,7 +3,7 @@
 include_once 'conexao_bd.php'; 
 
 function registrarUsuario($nome, $email, $senha) {
-    global $pdo; // Acessa a variável PDO da conexão global
+    global $pdo; 
 
     
     if (empty($nome)) {
