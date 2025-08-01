@@ -209,3 +209,43 @@ main {
     text-shadow: 0 0 2px var(--amarelo-vibrante);
     text-align: left;
 }
+
+.label-do-jogador {
+    font-weight: bold;
+    color: var(--verde-neon);
+    text-shadow: 0 0 2px var(--verde-neon);
+}
+
+.status-jogadores{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    border: 2px dashed var(--azul-celeste);
+    padding: 10px;
+    border-radius: inherit;
+}
+
+.status-jogadores h3 {
+    font-family: var(--fonte-secundaria);
+    font-size: 1.3rem;
+    color: var(--amarelo-vibrante);
+    text-shadow: 0 0 2px var(--amarelo-hover);
+}
+
+.status-jogadores .status-offline {
+    color: var(--vermelho-sangue);
+    text-shadow: 0 0 2px var(--vermelho-sangue);
+}
+
+.status-jogadores .status-online {
+    color: var(--verde-neon);
+    text-shadow: 0 0 2px var(--verde-neon);
+}
+
+.status-jogadores .e-voce-label {
+    color: var(--azul-celeste);
+    text-shadow: 0 0 2px var(--azul-celeste);
+}
