@@ -338,23 +338,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function desabilitarCartas(carta1, carta2) {
-        carta1.removeEventListener('click', virarCarta);
-        carta2.removeEventListener('click', virarCarta);
+      carta1.removeEventListener('click', virarCarta);
+      carta2.removeEventListener('click', virarCarta);
 
-        carta1.classList.add('par');
-        carta2.classList.add('par');
+
+      carta1.classList.add('par');
+      carta2.classList.add('par');
         
-        setTimeout(() => {
-            mandarEstadoCartasParaPHP().then(() => {
-                resetarTabuleiro();
-                if (jogoAtivo) {
-                    verificarFimDeJogo(); 
-                }
-                if (!vencedor && jogoAtivo) {
-                    iniciarTimerTurno();
-                }
-            });
-        }, 100);
+      setTimeout(() => {
+          mandarEstadoCartasParaPHP().then(() => {
+              resetarTabuleiro();
+              if (jogoAtivo) {
+                  verificarFimDeJogo(); 
+              }
+              if (!vencedor && jogoAtivo) {
+                  iniciarTimerTurno();
+              }
+          });
+      }, 100);
     }
 
     function resetarTabuleiro() {
