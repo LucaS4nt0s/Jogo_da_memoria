@@ -47,7 +47,7 @@ try {
 } catch (PDOException $e) {
     error_log("Erro ao atualizar pontuação: " . $e->getMessage());
     $resposta['mensagem'] = 'Erro interno ao atualizar pontuação.';
-    // $resposta['debug_message'] = $e->getMessage();
+    
 }
 
 echo json_encode($resposta);

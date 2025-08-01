@@ -5,7 +5,7 @@ require_once 'conexao_bd.php';
 
 header('Content-Type: application/json');
 
-// Verifica se o usuário está logado
+
 if (!isset($_SESSION['usuario_id'])) {
     echo json_encode(['success' => false, 'message' => 'Usuário não logado.']);
     exit();
