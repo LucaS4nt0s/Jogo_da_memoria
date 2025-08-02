@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let cartasViradas = [];
     let bloqueioJogo = false;
-    let transicaoEmAndamento = false; // Nova variável para controlar transições
+    let transicaoEmAndamento = false;
     let pontosJogador1 = 0;
     let pontosJogador2 = 0;
     let jogadorAtual = 1; 
@@ -35,22 +35,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let somCartaVirar;
     
     function inicializarSom() {
-        // Criar elemento de áudio para o som da carta virar
+        
         somCartaVirar = new Audio();
         somCartaVirar.preload = 'auto';
-        somCartaVirar.volume = 0.5; // Volume moderado
+        somCartaVirar.volume = 0.5; 
         
-        // Usar um som de "flip" ou "click" - você pode substituir por qualquer arquivo de som
-        // Por enquanto, vou usar um som sintético gerado via Web Audio API
+        
         criarSomSintetico();
     }
     
     function criarSomSintetico() {
-        // Criar um som sintético simples usando Web Audio API
+       
         try {
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
             
-            // Função para tocar som sintético
+            
             window.tocarSomCarta = function() {
                 const oscillator = audioContext.createOscillator();
                 const gainNode = audioContext.createGain();
@@ -72,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         } catch (error) {
             console.log('Web Audio API não suportada, som desabilitado');
-            window.tocarSomCarta = function() {}; // Função vazia se não suportar áudio
+            window.tocarSomCarta = function() {}; 
         }
     }
     
@@ -387,7 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         tocarSomCartaVirar();
-        
+
         // Verificar se a carta já está virada ou é a mesma carta
         if (this.classList.contains('virada')) return;
         if (this.classList.contains('par')) return;
