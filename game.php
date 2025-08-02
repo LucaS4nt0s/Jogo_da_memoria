@@ -138,15 +138,23 @@
                 
                 </div>
             </div>
-            <div class="pontuacao">
-                <h2>Pontuação</h2>
-                <span class="pontuacao-1"><p></p></span>
-                <?php if ($_SESSION['modo'] === 'duo'): ?>
-                    <span class="pontuacao-2"><p></p></span>
-                <?php endif; ?>
+
+           <?php if (isset($_SESSION['modo']) && $_SESSION['modo'] === 'duo'): ?>
+
+            <div class="pontuacao" style="<?php echo ($_SESSION['modo'] !== 'duo') ? 'display: none;' : ''; ?>">
+            <h2>Pontuação</h2>
+            <span class="pontuacao-1"><p></p></span>
+           
+                <span class="pontuacao-2"><p></p></span>
+                
                 <span class="vez"><p></p></span>
-                <p id="timer-turno"></p>
+            
+            <p id="timer-turno"></p>
             </div>
+
+            <?php endif; ?>
+        
+             
         </main>
         <script src="./js/jogo.js"></script>
     </body>

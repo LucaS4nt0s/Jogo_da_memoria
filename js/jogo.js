@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         } catch (error) {
             console.log('Web Audio API não suportada, som desabilitado');
-            window.tocarSomCarta = function() {}; 
+            window.tocarSomCarta = function() {}; // Função vazia se não suportar áudio
         }
     }
     
@@ -281,13 +281,8 @@ document.addEventListener('DOMContentLoaded', () => {
             placarJogador2.textContent = `Jogador 2: ${pontosJogador2}`;
         }
         if (vezJogador) {
-            let nomeJogador = '';
-            if (jogadorAtual === 1) {
-                nomeJogador = 'Jogador 1';
-            } else if (jogadorAtual === 2) {
-                nomeJogador = 'Jogador 2';
-            }
-            vezJogador.textContent = `Vez do ${nomeJogador}`;
+        
+            vezJogador.textContent = `Vez do jogador ${jogadorAtual}`;
         }
     }
 
@@ -598,7 +593,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 mensagemFimJogo += '\nEmpate!';
                 vencedorCalculado = null;
             }
+            
+            if(modo === 'solo') {
+            alert("pontuação final foi 8 pontos");
+            }
+            else {
             alert(mensagemFimJogo);
+            };
 
             pararCronometro();
             pararTimerTurno(); 
